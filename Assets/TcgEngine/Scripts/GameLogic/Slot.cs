@@ -17,10 +17,10 @@ namespace TcgEngine
         public int p; //0 or 1, represent player ID
 
         public static int x_min = 1; //Dont change this, should start at 1  (0,0,0 represent invalid slot)
-        public static int x_max = 5; //Number of slots in a row/zone
+        public static int x_max = 99; //Number of slots in a row/zone
 
         public static int y_min = 1; //Dont change this, should start at 1  (0,0,0 represent invalid slot)
-        public static int y_max = 1; //Set this to the number of rows/locations you want to have
+        public static int y_max = 99; //Set this to the number of rows/locations you want to have
 
         public static bool ignore_p = false; //Set to true if you dont want to use P value
 

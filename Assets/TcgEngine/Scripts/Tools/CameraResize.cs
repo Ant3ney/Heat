@@ -71,7 +71,7 @@ namespace TcgEngine
 
         public static float GetAspectMin()
         {
-            float min = 16f / 10f;
+            float min = 0f;
             return min;
         }
 
@@ -79,7 +79,9 @@ namespace TcgEngine
         {
             //bool allow_wide = TheGame.IsMobile() && TheGame.Get() != null;
             //float max = allow_wide ? 16f / 8f : 16f / 9f;
-            float max = 16f / 9f;
+
+            
+            float max = 900f;
             return max;
         }
 
