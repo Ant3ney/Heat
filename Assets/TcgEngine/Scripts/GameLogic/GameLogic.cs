@@ -19,7 +19,7 @@ namespace TcgEngine.Gameplay
         public UnityAction onTurnPlay;
         public UnityAction onTurnEnd;
 
-        public UnityAction<Card, Slot> onCardPlayed;      
+        public UnityAction<Card, Slot> onCardPlayed;
         public UnityAction<Card, Slot> onCardSummoned;
         public UnityAction<Card, Slot> onCardMoved;
         public UnityAction<Card> onCardTransformed;
@@ -27,7 +27,7 @@ namespace TcgEngine.Gameplay
         public UnityAction<int> onCardDrawn;
         public UnityAction<int> onRollValue;
 
-        public UnityAction<AbilityData, Card> onAbilityStart;        
+        public UnityAction<AbilityData, Card> onAbilityStart;
         public UnityAction<AbilityData, Card, Card> onAbilityTargetCard;  //Ability, Caster, Target
         public UnityAction<AbilityData, Card, Player> onAbilityTargetPlayer;
         public UnityAction<AbilityData, Card, Slot> onAbilityTargetSlot;
@@ -48,7 +48,7 @@ namespace TcgEngine.Gameplay
 
         private ResolveQueue resolve_queue;
         private bool is_ai_predict = false;
-        
+
         private System.Random random = new System.Random();
 
         private ListSwap<Card> card_array = new ListSwap<Card>();
@@ -135,7 +135,7 @@ namespace TcgEngine.Gameplay
 
             StartTurn();
         }
-		
+
         public virtual void StartTurn()
         {
             if (game_data.state == GameState.GameEnded)
@@ -174,7 +174,7 @@ namespace TcgEngine.Gameplay
             {
                 Card card = player.cards_board[i];
 
-                if(!card.HasStatus(StatusType.Sleep))
+                if (!card.HasStatus(StatusType.Sleep))
                     card.Refresh();
 
                 if (card.HasStatus(StatusType.Poisoned))
@@ -198,7 +198,7 @@ namespace TcgEngine.Gameplay
                 return;
 
             game_data.current_player = (game_data.current_player + 1) % game_data.settings.nb_players;
-            
+
             if (game_data.current_player == game_data.first_player)
                 game_data.turn_count++;
 
@@ -353,7 +353,7 @@ namespace TcgEngine.Gameplay
             }
 
             //Shuffle deck
-            if(puzzle == null || !puzzle.dont_shuffle_deck)
+            if (puzzle == null || !puzzle.dont_shuffle_deck)
                 ShuffleDeck(player.cards_deck);
         }
 
@@ -369,7 +369,7 @@ namespace TcgEngine.Gameplay
             {
                 CardData hdata = CardData.Get(deck.hero.tid);
                 VariantData hvariant = VariantData.Get(deck.hero.variant);
-                if(hdata != null && hvariant != null)
+                if (hdata != null && hvariant != null)
                     player.hero = Card.Create(hdata, hvariant, player);
             }
 
@@ -398,13 +398,17 @@ namespace TcgEngine.Gameplay
             if (game_data.CanPlayCard(card, slot, skip_cost))
             {
                 Player player = game_data.GetPlayer(card.player_id);
-                
+
                 //Cost
                 if (!skip_cost)
                     player.PayMana(card);
 
                 //Play card
                 player.RemoveCardFromAllGroups(card);
+
+                Debug.Log("--- Game logic ---");
+                Debug.Log(slot.x);
+                Debug.Log("--- --- ---");
 
                 //Add to board
                 CardData icard = card.CardData;
@@ -431,7 +435,7 @@ namespace TcgEngine.Gameplay
                 }
 
                 //History
-                if(!is_ai_predict && !icard.IsSecret())
+                if (!is_ai_predict && !icard.IsSecret())
                     player.AddHistory(GameAction.PlayCard, card);
 
                 //Update ongoing effects
@@ -491,7 +495,7 @@ namespace TcgEngine.Gameplay
             {
 
                 Player player = game_data.GetPlayer(attacker.player_id);
-                if(!is_ai_predict)
+                if (!is_ai_predict)
                     player.AddHistory(GameAction.Attack, attacker, target);
 
                 //Trigger before attack abilities
@@ -530,7 +534,7 @@ namespace TcgEngine.Gameplay
             DamageCard(attacker, target, datt1);
 
             //Counter Damage
-            if(!attacker.HasStatus(StatusType.Intimidate))
+            if (!attacker.HasStatus(StatusType.Intimidate))
                 DamageCard(target, attacker, datt2);
 
             //Save attack and exhaust
@@ -567,7 +571,7 @@ namespace TcgEngine.Gameplay
                 return;
 
             Player player = game_data.GetPlayer(attacker.player_id);
-            if(!is_ai_predict)
+            if (!is_ai_predict)
                 player.AddHistory(GameAction.AttackPlayer, attacker, target);
 
             //Resolve abilities
@@ -816,7 +820,7 @@ namespace TcgEngine.Gameplay
         //Generic damage that doesnt come from another card
         public virtual void DamageCard(Card target, int value)
         {
-            if(target == null)
+            if (target == null)
                 return;
 
             if (target.HasStatus(StatusType.Invincibility))
@@ -964,7 +968,7 @@ namespace TcgEngine.Gameplay
             }
 
             Card equipped = game_data.GetEquipCard(caster.equipped_uid);
-            if(equipped != null)
+            if (equipped != null)
                 TriggerCardAbilityType(type, equipped, triggerer);
         }
 
@@ -982,12 +986,12 @@ namespace TcgEngine.Gameplay
             if (equipped != null)
                 TriggerCardAbilityType(type, equipped, triggerer);
         }
-        
+
         public virtual void TriggerOtherCardsAbilityType(AbilityTrigger type, Card triggerer)
         {
             foreach (Player oplayer in game_data.players)
             {
-                if(oplayer.hero != null)
+                if (oplayer.hero != null)
                     TriggerCardAbilityType(type, oplayer.hero, triggerer);
 
                 foreach (Card card in oplayer.cards_board)
@@ -1249,7 +1253,7 @@ namespace TcgEngine.Gameplay
             for (int p = 0; p < game_data.players.Length; p++)
             {
                 Player player = game_data.players[p];
-                for(int c=0; c<player.cards_board.Count; c++)
+                for (int c = 0; c < player.cards_board.Count; c++)
                 {
                     Card card = player.cards_board[c];
 
@@ -1292,7 +1296,7 @@ namespace TcgEngine.Gameplay
                     if (card.GetHP() <= 0)
                         DiscardCard(card);
                     Card bearer = player.GetBearerCard(card);
-                    if(bearer == null)
+                    if (bearer == null)
                         DiscardCard(card);
                 }
             }
@@ -1459,7 +1463,7 @@ namespace TcgEngine.Gameplay
             if (trigger_card.HasStatus(StatusType.SpellImmunity))
                 return false; //Spell Immunity, triggerer is the one that trigger the trap, target is the one attacked, so usually the player who played the trap, so we dont check the target
 
-            for(int p=0; p < game_data.players.Length; p++ )
+            for (int p = 0; p < game_data.players.Length; p++)
             {
                 if (p != trigger_card.player_id)
                 {
@@ -1495,7 +1499,7 @@ namespace TcgEngine.Gameplay
             if (icard.type == CardType.Secret)
             {
                 Player tplayer = game_data.GetPlayer(trigger.player_id);
-                if(!is_ai_predict)
+                if (!is_ai_predict)
                     tplayer.AddHistory(GameAction.SecretTriggered, secret_card, trigger);
 
                 TriggerCardAbilityType(secret_trigger, secret_card, trigger);
@@ -1586,7 +1590,7 @@ namespace TcgEngine.Gameplay
 
             if (game_data.selector == SelectorType.SelectTarget)
             {
-                if(!ability.CanTarget(game_data, caster, target))
+                if (!ability.CanTarget(game_data, caster, target))
                     return; //Conditions not met
 
                 Player player = game_data.GetPlayer(caster.player_id);

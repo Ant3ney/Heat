@@ -54,7 +54,7 @@ namespace TcgEngine.Client
         {
             return GetSlot();
         }
-        
+
         public virtual Card GetSlotCard(Vector3 wpos)
         {
             Game gdata = GameClient.Get().GetGameData();

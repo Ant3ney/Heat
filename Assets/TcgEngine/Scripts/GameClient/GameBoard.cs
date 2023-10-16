@@ -30,7 +30,7 @@ namespace TcgEngine.Client
 
         private void Start()
         {
-            
+
         }
 
         void Update()

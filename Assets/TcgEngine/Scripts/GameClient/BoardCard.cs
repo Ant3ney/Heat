@@ -92,7 +92,7 @@ namespace TcgEngine.Client
             Game data = GameClient.Get().GetGameData();
             Player player = GameClient.Get().GetPlayer();
             Card card = data.GetCard(card_uid);
-            if(!destroyed)
+            if (!destroyed)
                 card_ui.SetCard(card);
 
             bool selected = controls.GetSelected() == this;
@@ -174,6 +174,10 @@ namespace TcgEngine.Client
 
             if (destroyed && back_to_hand && timer > 0.5f)
                 return back_to_hand_target;
+
+            Debug.Log("--- Bord Card ---");
+            Debug.Log(card.slot.x);
+            Debug.Log("--- --- ---");
 
             BSlot slot = BSlot.Get(card.slot);
             if (slot != null)
@@ -393,7 +397,7 @@ namespace TcgEngine.Client
                 return GetEquipCard();
             return GetCard();
         }
-        
+
         public CardData GetCardData()
         {
             Card card = GetCard();
