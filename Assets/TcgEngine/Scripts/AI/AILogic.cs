@@ -385,7 +385,10 @@ namespace TcgEngine.AI
                     {
                         if (data.CanPlayCard(card, slot))
                         {
+                            // Come back here
                             Card slot_card = data.GetSlotCard(slot);
+                            Debug.Log("Slog card below");
+                            Debug.Log(slot_card);
                             AIAction action = CreateAction(type, card);
                             action.slot = slot;
                             action.target_uid = slot_card != null ? slot_card.uid : null;
