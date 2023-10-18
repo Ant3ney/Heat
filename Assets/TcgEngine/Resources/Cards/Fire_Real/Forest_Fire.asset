@@ -12,21 +12,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 843a21f7f6f205741a0a7341aec8e84d, type: 3}
   m_Name: Forest_Fire
   m_EditorClassIdentifier: 
-  id: bull_heat
+  id: forest_fire
   title: Forest Fire
-  art_full: {fileID: 21300000, guid: 40307ec5eae2d92459a10d13d4a6de5f, type: 3}
-  art_board: {fileID: 21300000, guid: 4df1ddd2c83f83649b0a1e2444d7461f, type: 3}
+  art_full: {fileID: 21300000, guid: e96ec292b7ee314449aa26ff77235fa4, type: 3}
+  art_board: {fileID: 21300000, guid: 851eefbc404a2134fa7025f78d2ab07d, type: 3}
   type: 10
   team: {fileID: 11400000, guid: 6bbb96863ece0314fb318c0fce569afc, type: 2}
   rarity: {fileID: 11400000, guid: fab1a52f5a36cc942985dea95be18ac9, type: 2}
-  mana: 3
-  attack: 2
-  hp: 5
+  mana: 1
+  attack: 1
+  hp: 3
   traits: []
   stats: []
-  abilities:
-  - {fileID: 11400000, guid: 99fa42c7ad702a94ba8151bec71fb326, type: 2}
-  text: Spell damage +1.
+  abilities: []
+  text: 
   desc: 
   spawn_fx: {fileID: 9125387663047351618, guid: bac685160af4aff46ae561a51da6f5f4,
     type: 3}
