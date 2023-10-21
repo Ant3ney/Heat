@@ -6,6 +6,11 @@ const port = 6969;
 
 const uri = "mongodb+srv://afordm99:VAbiGK7nx26VILb3@heatgame.qos8kpx.mongodb.net/?retryWrites=true&w=majority"
 
+const playerRouter = require("./routes/player");
+
+app.use(express.json());
+app.use("/user", playerRouter);
+
 mongoose.connect(
                     uri,
                     {
