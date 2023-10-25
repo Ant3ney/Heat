@@ -6057,6 +6057,26 @@ PrefabInstance:
       propertyPath: start_text_fx
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 3582334442735989256, guid: 4f5d06d57a8cd5f42b526a96b940dca7,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.74586
+      objectReference: {fileID: 0}
+    - target: {fileID: 3582334442735989256, guid: 4f5d06d57a8cd5f42b526a96b940dca7,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.74586
+      objectReference: {fileID: 0}
+    - target: {fileID: 3582334442735989256, guid: 4f5d06d57a8cd5f42b526a96b940dca7,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.74586
+      objectReference: {fileID: 0}
+    - target: {fileID: 3582334442735989256, guid: 4f5d06d57a8cd5f42b526a96b940dca7,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -149
+      objectReference: {fileID: 0}
     - target: {fileID: 3582334443217354800, guid: 4f5d06d57a8cd5f42b526a96b940dca7,
         type: 3}
       propertyPath: m_Camera

@@ -406,10 +406,6 @@ namespace TcgEngine.Gameplay
                 //Play card
                 player.RemoveCardFromAllGroups(card);
 
-                Debug.Log("--- Game logic ---");
-                Debug.Log(slot.x);
-                Debug.Log("--- --- ---");
-
                 //Add to board
                 CardData icard = card.CardData;
                 if (icard.IsBoardCard())

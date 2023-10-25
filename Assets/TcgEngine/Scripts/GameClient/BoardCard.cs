@@ -175,10 +175,6 @@ namespace TcgEngine.Client
             if (destroyed && back_to_hand && timer > 0.5f)
                 return back_to_hand_target;
 
-            Debug.Log("--- Bord Card ---");
-            Debug.Log(card.slot.x);
-            Debug.Log("--- --- ---");
-
             BSlot slot = BSlot.Get(card.slot);
             if (slot != null)
             {
