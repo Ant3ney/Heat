@@ -94,41 +94,49 @@ namespace TcgEngine
         }
         
         //Check if a card is allowed to be played on slot
-        public virtual bool CanPlayCard(Card card, Slot slot, bool skip_cost = false)
+        public virtual bool CanPlayCard(Card card, Slot slot, bool skip_cost = false, bool isAI = false)
         {
-            if (card == null)
+            if(isAI){
+               /* Debug.Log("Is AI");  */
+               return true;
+            }
+            else{
+                /* Debug.Log("Is not AI"); */
+               if (card == null)
                 return false;
 
-            Player player = GetPlayer(card.player_id);
-            if (!skip_cost && !player.CanPayMana(card))
-                return false; //Cant pay mana
-            if (!player.HasCard(player.cards_hand, card))
-                return false; // Card not in hand
+                Player player = GetPlayer(card.player_id);
+                if (!skip_cost && !player.CanPayMana(card))
+                    return false; //Cant pay mana
+                if (!player.HasCard(player.cards_hand, card))
+                    return false; // Card not in hand
 
-            if (card.CardData.IsBoardCard())
-            {
-                if (!slot.IsValid() || IsCardOnSlot(slot))
-                    return false;   //Slot already occupied
-                if (Slot.GetP(card.player_id) != slot.p)
-                    return false; //Cant play on opponent side
-                return true;
-            }
-            if (card.CardData.IsEquipment())
-            {
-                if (!slot.IsValid())
-                    return false;
+                if (card.CardData.IsBoardCard())
+                {
+                    if (!slot.IsValid() || IsCardOnSlot(slot))
+                        return false;   //Slot already occupied
+                    if (Slot.GetP(card.player_id) != slot.p)
+                        return false; //Cant play on opponent side
+                    return true;
+                }
+                if (card.CardData.IsEquipment())
+                {
+                    if (!slot.IsValid())
+                        return false;
 
-                Card target = GetSlotCard(slot);
-                if (target == null || target.CardData.type != CardType.Character || target.player_id != card.player_id)
-                    return false; //Target must be an allied character
+                    Card target = GetSlotCard(slot);
+                    if (target == null || target.CardData.type != CardType.Character || target.player_id != card.player_id)
+                        return false; //Target must be an allied character
 
-                return true;
+                    return true;
+                }
+                if (card.CardData.IsRequireTargetSpell())
+                {
+                    return IsPlayTargetValid(card, slot); //Check play target on slot
+                }
+                return true; 
             }
-            if (card.CardData.IsRequireTargetSpell())
-            {
-                return IsPlayTargetValid(card, slot); //Check play target on slot
-            }
-            return true;
+            
         }
 
         //Check if a card is allowed to move to slot

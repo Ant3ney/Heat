@@ -138,12 +138,20 @@ namespace TcgEngine.AI
             {
                 if (data.selector == SelectorType.None)
                 {
+
                     //Play card
-                    for (int c = 0; c < player.cards_hand.Count; c++)
-                    {
-                        Card card = player.cards_hand[c];
+                    if(player.is_ai){
+                        Card card = player.cards_hand[0];
                         AddActions(action_list, data, node, GameAction.PlayCard, card);
                     }
+                    else{  
+                        for (int c = 0; c < player.cards_hand.Count; c++)
+                        {
+                            Card card = player.cards_hand[c];
+                            AddActions(action_list, data, node, GameAction.PlayCard, card);
+                        }
+                    }
+                    
 
                     //Action on board
                     for (int c = 0; c < player.cards_board.Count; c++)
@@ -385,12 +393,12 @@ namespace TcgEngine.AI
                     }
                     foreach (Slot slot in Slot.GetAll())
                     {
-                        if (data.CanPlayCard(card, slot))
+                        bool isAI = data.GetPlayer(data.current_player).is_ai;
+                        if (data.CanPlayCard(card, slot, false, isAI))
                         {
                             // Come back here
                             Card slot_card = data.GetSlotCard(slot);
-                            Debug.Log("Slog card below");
-                            Debug.Log(slot_card);
+                       
                             AIAction action = CreateAction(type, card);
                             action.slot = slot;
                             action.target_uid = slot_card != null ? slot_card.uid : null;
