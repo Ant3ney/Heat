@@ -71,6 +71,7 @@ namespace TcgEngine.AI
             if (running)
                 return;
 
+            Debug.Log("original_data is redefined");
             original_data = Game.CloneNew(data);        //Clone game data to keep original data unaffected
             game_logic.ClearResolve();                 //Clear temp memory
             game_logic.SetData(original_data);          //Assign data to game logic
@@ -81,6 +82,7 @@ namespace TcgEngine.AI
             nb_calculated = 0;
 
             Start();
+            
         }
 
         public void Start()
