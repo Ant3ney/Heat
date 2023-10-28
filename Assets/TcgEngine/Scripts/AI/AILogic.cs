@@ -140,7 +140,7 @@ namespace TcgEngine.AI
                 {
 
                     //Play card
-                    if(player.is_ai){
+                    if(player.is_ai && player.cards_hand.Count > 0){
                         Card card = player.cards_hand[0];
                         AddActions(action_list, data, node, GameAction.PlayCard, card);
                     }
