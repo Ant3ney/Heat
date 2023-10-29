@@ -14,7 +14,7 @@ namespace TcgEngine.Server
     /// or if online multiple GameServer, one for each match, will be created by the dedicated server
     /// Manage receiving actions, sending refresh, and running AI
     /// </summary>
-    
+
     public class GameServer
     {
         public string game_uid; //Game unique ID
@@ -33,7 +33,7 @@ namespace TcgEngine.Server
         private List<ClientData> connected_clients = new List<ClientData>();  //Include obervers, removed from array when disconnected, all clients receive refreshes
         private List<AIPlayer> ai_list = new List<AIPlayer>();                //List of all AI players
         private Queue<QueuedGameAction> queued_actions = new Queue<QueuedGameAction>(); //List of action waiting to be processed
-        
+
         private Dictionary<ushort, CommandEvent> registered_commands = new Dictionary<ushort, CommandEvent>();
 
         public GameServer(string uid, int players, bool online)
@@ -261,7 +261,7 @@ namespace TcgEngine.Server
         public void ExecuteAction(ushort type, ClientData client, SerializedData sdata)
         {
             bool found = registered_commands.TryGetValue(type, out CommandEvent command);
-            if(found)
+            if (found)
                 command.callback.Invoke(client, sdata);
         }
 
@@ -408,7 +408,7 @@ namespace TcgEngine.Server
             {
                 UserData user = Authenticator.Get().UserData; //Offline game, get local user
 
-                if(Authenticator.Get().IsApi())
+                if (Authenticator.Get().IsApi())
                     user = await ApiClient.Get().LoadUserData(username); //Online game, validate from api
 
                 //Use user API deck
@@ -502,7 +502,7 @@ namespace TcgEngine.Server
                 return; //Actions cant be performed now (not your turn?)
 
             Card card = player.GetCard(card_uid);
-            if(card != null && card.player_id == player.player_id)
+            if (card != null && card.player_id == player.player_id)
                 gameplay.PlayCard(card, slot);
         }
 
@@ -799,7 +799,7 @@ namespace TcgEngine.Server
             SendToAll(GameAction.CardMoved, mdata, NetworkDelivery.Reliable);
             RefreshAll();
         }
-        
+
         protected virtual void OnCardSummoned(Card card, Slot slot)
         {
             MsgPlayCard mdata = new MsgPlayCard();

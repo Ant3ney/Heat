@@ -31,6 +31,7 @@ namespace TcgEngine.AI
             if (!is_playing && CanPlay())
             {
                 is_playing = true;
+                Debug.Log("Ran AI turn");
                 TimeTool.StartCoroutine(AiTurn());
             }
 
@@ -40,25 +41,37 @@ namespace TcgEngine.AI
 
         private IEnumerator AiTurn()
         {
+            Debug.Log("AI Turn " + player_id + " Level " + ai_level);
+
             yield return new WaitForSeconds(1f);
+
 
             Game game_data = gameplay.GetGameData();
             ai_logic.RunAI(game_data);
+
+            Player player = game_data.GetPlayer(game_data.current_player);
+            string card_hand_id = player.cards_hand[0].uid;
 
             while (ai_logic.IsRunning())
             {
                 yield return new WaitForSeconds(0.1f);
             }
 
+            AIAction aiAction = new AIAction();
+            aiAction.type = GameAction.PlayCard;
+            aiAction.card_uid = card_hand_id;
+            aiAction.slot = new Slot(1, 1, 0);
+
             AIAction best = ai_logic.GetBestAction();
 
-            if (best != null)
+            if (aiAction != null)
             {
-                Debug.Log("Execute AI Action: " + best.GetText(game_data) + "\n" + ai_logic.GetNodePath());
+                Debug.Log("Execute AI Action: " + aiAction.GetText(game_data) + "\n" + ai_logic.GetNodePath());
                 //foreach (NodeState node in ai_logic.GetFirst().childs)
                 //   Debug.Log(ai_logic.GetNodePath(node));
 
-                ExecuteOrder(best);
+                ExecuteOrder(aiAction);
+                ExecuteOrder(new AIAction(GameAction.EndTurn));
             }
 
             ai_logic.ClearMemory();
@@ -157,7 +170,7 @@ namespace TcgEngine.AI
             Card card = game_data.GetCard(card_uid);
             if (card != null)
             {
-                gameplay.MoveCard(card, slot); 
+                gameplay.MoveCard(card, slot);
             }
         }
 

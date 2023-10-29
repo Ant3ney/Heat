@@ -71,7 +71,6 @@ namespace TcgEngine.AI
             if (running)
                 return;
 
-            Debug.Log("original_data is redefined");
             original_data = Game.CloneNew(data);        //Clone game data to keep original data unaffected
             game_logic.ClearResolve();                 //Clear temp memory
             game_logic.SetData(original_data);          //Assign data to game logic
@@ -82,7 +81,7 @@ namespace TcgEngine.AI
             nb_calculated = 0;
 
             Start();
-            
+
         }
 
         public void Start()
@@ -140,18 +139,20 @@ namespace TcgEngine.AI
                 {
 
                     //Play card
-                    if(player.is_ai && player.cards_hand.Count > 0){
+                    if (player.is_ai && player.cards_hand.Count > 0)
+                    {
                         Card card = player.cards_hand[0];
                         AddActions(action_list, data, node, GameAction.PlayCard, card);
                     }
-                    else{  
+                    else
+                    {
                         for (int c = 0; c < player.cards_hand.Count; c++)
                         {
                             Card card = player.cards_hand[c];
                             AddActions(action_list, data, node, GameAction.PlayCard, card);
                         }
                     }
-                    
+
 
                     //Action on board
                     for (int c = 0; c < player.cards_board.Count; c++)
@@ -398,7 +399,7 @@ namespace TcgEngine.AI
                         {
                             // Come back here
                             Card slot_card = data.GetSlotCard(slot);
-                       
+
                             AIAction action = CreateAction(type, card);
                             action.slot = slot;
                             action.target_uid = slot_card != null ? slot_card.uid : null;
@@ -545,7 +546,7 @@ namespace TcgEngine.AI
 
             if (ability.target == AbilityTarget.ChoiceSelector)
             {
-                for(int i=0; i<ability.chain_abilities.Length; i++)
+                for (int i = 0; i < ability.chain_abilities.Length; i++)
                 {
                     AbilityData choice = ability.chain_abilities[i];
                     if (choice != null && data.CanSelectAbility(caster, choice))
