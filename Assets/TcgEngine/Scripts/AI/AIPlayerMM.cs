@@ -39,6 +39,7 @@ namespace TcgEngine.AI
                 Stop();
         }
 
+        // Start implementing AI here
         private IEnumerator AiTurn()
         {
             Debug.Log("AI Turn " + player_id + " Level " + ai_level);
