@@ -14,6 +14,7 @@ namespace TcgEngine
     {
         public int x; //From 1 to 5
         public int y; //Not in use, could be used to add more rows or different locations on the board
+        public int health;
         public int p; //0 or 1, represent player ID
 
         public static int x_min = 1; //Dont change this, should start at 1  (0,0,0 represent invalid slot)
@@ -32,6 +33,7 @@ namespace TcgEngine
             this.x = 0;
             this.y = 0;
             this.p = pid;
+            this.health = 2;    
         }
 
         public Slot(int x, int y, int pid)
@@ -39,6 +41,7 @@ namespace TcgEngine
             this.x = x;
             this.y = y;
             this.p = pid;
+            this.health = 2;
         }
 
         public Slot(SlotXY slot, int pid)
@@ -46,6 +49,7 @@ namespace TcgEngine
             this.x = slot.x;
             this.y = slot.y;
             this.p = pid;
+            this.health = 2;
         }
 
         public bool IsInRangeX(Slot slot, int range)
@@ -156,7 +160,8 @@ namespace TcgEngine
                 {
                     for (int x = x_min; x <= x_max; x++)
                     {
-                        all_slots.Add(new Slot(x, y, p));
+                        Slot newSlot = new Slot(x, y, p);
+                        all_slots.Add(newSlot);
                     }
                 }
             }

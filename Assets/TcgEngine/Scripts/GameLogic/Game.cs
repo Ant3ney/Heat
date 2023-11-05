@@ -42,6 +42,8 @@ namespace TcgEngine
         public HashSet<string> ability_played = new HashSet<string>();
         public HashSet<string> cards_attacked = new HashSet<string>();
 
+        public static List<string> usedAICardUIDs = new List<string>();
+
         public Game() { }
         
         public Game(string uid, int nb_players)

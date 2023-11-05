@@ -12,7 +12,7 @@ namespace TcgEngine.AI
     public class AIPlayerMM : AIPlayer
     {
         private AILogic ai_logic;
-
+        private System.Random rand = new System.Random();
         private bool is_playing = false;
 
         public AIPlayerMM(GameLogic gameplay, int id, int level)
@@ -42,6 +42,7 @@ namespace TcgEngine.AI
         // Start implementing AI here
         private IEnumerator AiTurn()
         {
+            List<AIAction> aiActions = new List<AIAction>();
             Debug.Log("AI Turn " + player_id + " Level " + ai_level);
 
             yield return new WaitForSeconds(1f);
@@ -51,28 +52,71 @@ namespace TcgEngine.AI
             ai_logic.RunAI(game_data);
 
             Player player = game_data.GetPlayer(game_data.current_player);
-            string card_hand_id = player.cards_hand[0].uid;
+            
 
             while (ai_logic.IsRunning())
             {
                 yield return new WaitForSeconds(0.1f);
             }
 
-            AIAction aiAction = new AIAction();
-            aiAction.type = GameAction.PlayCard;
-            aiAction.card_uid = card_hand_id;
-            aiAction.slot = new Slot(1, 1, 0);
+            if(game_data.turn_count == 0 || game_data.turn_count == 1){
+                string card_hand_id = player.cards_hand[0].uid;
+                aiActions.Add(new AIAction());
+                aiActions.Add(new AIAction());
 
-            AIAction best = ai_logic.GetBestAction();
+                aiActions[0].type = GameAction.PlayCard;
+                aiActions[0].card_uid = card_hand_id;
 
-            if (aiAction != null)
+                //TODO: Make it so that the initial location is any valid slot
+                aiActions[0].slot = new Slot(6, 1, 0);
+
+                aiActions[1].type = GameAction.EndTurn;
+                Debug.Log("card_hand_id: " + card_hand_id);
+            }
+            else{
+                List<int> slotsToBurn = ai_logic.getTilesToBurn(game_data);
+                int actionIndex = 0;
+                foreach (var slotCordinate in slotsToBurn)
+                {
+                    string card_hand_id = player.cards_hand[game_data.turn_count].uid;
+                    Debug.Log("card_hand_id: " + card_hand_id);
+                    Debug.Log("Slot to burn: " + slotCordinate);
+                    aiActions.Add(new AIAction());
+                    aiActions[actionIndex].type = GameAction.PlayCard;
+                    aiActions[actionIndex].card_uid = card_hand_id;
+                    aiActions[0].slot = new Slot(slotCordinate, 1, 0);
+
+                    actionIndex++;
+                }
+                
+                aiActions.Add(new AIAction());
+                aiActions[actionIndex].type  = GameAction.EndTurn;
+            }
+
+            
+
+
+            ai_logic.getTilesToBurn(game_data);
+
+            if (aiActions != null)
             {
-                Debug.Log("Execute AI Action: " + aiAction.GetText(game_data) + "\n" + ai_logic.GetNodePath());
+                
                 //foreach (NodeState node in ai_logic.GetFirst().childs)
                 //   Debug.Log(ai_logic.GetNodePath(node));
 
-                ExecuteOrder(aiAction);
-                ExecuteOrder(new AIAction(GameAction.EndTurn));
+                /* ExecuteOrder(aiAction);
+                ExecuteOrder(new AIAction(GameAction.EndTurn)); */ 
+
+                foreach (var aiAction in aiActions)
+                {
+                    Debug.Log("Execute AI Action: " + aiAction.GetText(game_data) + "\n" + ai_logic.GetNodePath());
+                    // Process each action
+                    // For example, you might call a method on each action
+                    yield return new WaitForSeconds(1f);
+                    ExecuteOrder(aiAction);
+                }
+
+
             }
 
             ai_logic.ClearMemory();
@@ -146,6 +190,7 @@ namespace TcgEngine.AI
 
             if (order.type == GameAction.EndTurn)
             {
+                
                 EndTurn();
             }
 
@@ -158,10 +203,12 @@ namespace TcgEngine.AI
         private void PlayCard(string card_uid, Slot slot)
         {
             Game game_data = gameplay.GetGameData();
-            Card card = game_data.GetCard(card_uid);
-            if (card != null)
+            Player player = game_data.GetPlayer(game_data.current_player);
+            Card random = player.GetRandomCard(player.cards_hand, rand);
+            
+            if (random != null)
             {
-                gameplay.PlayCard(card, slot);
+                gameplay.PlayCard(random, slot);
             }
         }
 
