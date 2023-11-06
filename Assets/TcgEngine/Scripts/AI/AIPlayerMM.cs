@@ -54,6 +54,8 @@ namespace TcgEngine.AI
 
             if (game_data.turn_count == 0 || game_data.turn_count == 1)
             {
+
+
                 string card_hand_id = player.cards_hand[0].uid;
                 aiActions.Add(new AIAction());
                 aiActions.Add(new AIAction());
@@ -62,14 +64,23 @@ namespace TcgEngine.AI
                 aiActions[0].card_uid = card_hand_id;
 
                 //TODO: Make it so that the initial location is any valid slot
-                aiActions[0].slot = new Slot(6, 1, 0);
+                int randomStartingPoint = getRandomValidSlotForFire(game_data, true);
+                aiActions[0].slot = new Slot(randomStartingPoint, 1, 0);
                 aiActions[1].type = GameAction.EndTurn;
                 Debug.Log("card_hand_id: " + card_hand_id);
             }
             else
             {
+                bool spawnedSeasonFire = false;
+                if (game_data.startSeasonFire())
+                {
+                    aiActions.Add(new AIAction());
+                    aiActions[0].type = GameAction.PlayCard;
+                    aiActions[0].slot = new Slot(getRandomValidSlotForFire(game_data), 1, 0);
+                    spawnedSeasonFire = true;
+                }
                 List<int> slotsToBurn = ai_logic.getTilesToBurn(game_data);
-                int actionIndex = 0;
+                int actionIndex = spawnedSeasonFire ? 1 : 0;
                 foreach (var slotCordinate in slotsToBurn)
                 {
 
@@ -120,7 +131,9 @@ namespace TcgEngine.AI
             // filter out slots that are adjacent to fire fighters
 
             List<int> validSlots = new List<int>();
-            List<int> adjacentFireSlots = new List<int>();
+            List<int> emptySlots = new List<int>();
+            List<int> fireFighterSlots = new List<int>();
+            List<int> fireSlots = new List<int>();
             List<int> adjacentFireFighterSlots = new List<int>();
 
             foreach (Slot slot in Slot.GetAll())
@@ -128,11 +141,32 @@ namespace TcgEngine.AI
                 Card card = game_data.GetSlotCard(slot);
                 if (card == null)
                 {
-                    validSlots.Add(slot.x);
+                    emptySlots.Add(slot.x);
+                }
+                else if (card.card_id == "dale_hudson")
+                {
+                    int fireFighterLocation = slot.x;
+                    int[] adjacentCoordinates = Utilities.getAdjacentCoordinates(fireFighterLocation);
+                    foreach (int coordinate in adjacentCoordinates)
+                    {
+                        if (coordinate != 0)
+                        {
+                            adjacentFireFighterSlots.Add(coordinate);
+                        }
+                    }
+                }
+
+            }
+
+            foreach (int slot in emptySlots)
+            {
+                if (!adjacentFireFighterSlots.Contains(slot))
+                {
+                    validSlots.Add(slot);
                 }
             }
 
-            return 0;
+            return validSlots[Random.Range(0, validSlots.Count)];
 
         }
 

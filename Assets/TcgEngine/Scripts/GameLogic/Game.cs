@@ -44,8 +44,30 @@ namespace TcgEngine
 
         public static List<string> usedAICardUIDs = new List<string>();
 
+
+        int mid_season_turn = 4;
+        bool is_mid_season_over = false;
+        int end_season_turn = 8;
+        bool is_end_season_over = false;
+
+        public bool startSeasonFire()
+        {
+            if (turn_count >= mid_season_turn && !is_mid_season_over && Random.Range(0, 11) % 2 == 0)
+            {
+                is_mid_season_over = true;
+                return true;
+            }
+            else if (turn_count >= end_season_turn && !is_end_season_over && Random.Range(0, 11) % 2 == 0)
+            {
+                is_end_season_over = true;
+                return true;
+            }
+            return false;
+        }
+
+
         public Game() { }
-        
+
         public Game(string uid, int nb_players)
         {
             this.game_uid = uid;
@@ -85,27 +107,29 @@ namespace TcgEngine
 
         public virtual bool IsPlayerActionTurn(Player player)
         {
-            return player != null && current_player == player.player_id 
+            return player != null && current_player == player.player_id
                 && state == GameState.Play && selector == SelectorType.None;
         }
 
         public virtual bool IsPlayerSelectorTurn(Player player)
         {
-            return player != null && selector_player_id == player.player_id 
+            return player != null && selector_player_id == player.player_id
                 && state == GameState.Play && selector != SelectorType.None;
         }
-        
+
         //Check if a card is allowed to be played on slot
         public virtual bool CanPlayCard(Card card, Slot slot, bool skip_cost = false, bool isAI = false)
         {
-            if(isAI){
-               /* Debug.Log("Is AI");  */
-               return true;
+            if (isAI)
+            {
+                /* Debug.Log("Is AI");  */
+                return true;
             }
-            else{
+            else
+            {
                 /* Debug.Log("Is not AI"); */
-               if (card == null)
-                return false;
+                if (card == null)
+                    return false;
 
                 Player player = GetPlayer(card.player_id);
                 if (!skip_cost && !player.CanPayMana(card))
@@ -136,9 +160,9 @@ namespace TcgEngine
                 {
                     return IsPlayTargetValid(card, slot); //Check play target on slot
                 }
-                return true; 
+                return true;
             }
-            
+
         }
 
         //Check if a card is allowed to move to slot
@@ -169,7 +193,7 @@ namespace TcgEngine
         //Check if a card is allowed to attack a player
         public virtual bool CanAttackTarget(Card attacker, Player target, bool skip_cost = false)
         {
-            if(attacker == null || target == null)
+            if (attacker == null || target == null)
                 return false;
 
             if (!attacker.CanAttack(skip_cost))
@@ -438,7 +462,7 @@ namespace TcgEngine
             }
             return null;
         }
-        
+
         public virtual Player GetRandomPlayer(System.Random rand)
         {
             Player player = GetPlayer(rand.NextDouble() < 0.5 ? 1 : 0);
@@ -531,7 +555,7 @@ namespace TcgEngine
             if (dest.players == null)
             {
                 dest.players = new Player[source.players.Length];
-                for(int i=0; i< source.players.Length; i++)
+                for (int i = 0; i < source.players.Length; i++)
                     dest.players[i] = new Player(i);
             }
 
