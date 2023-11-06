@@ -14,6 +14,8 @@ namespace TcgEngine
     {
         public override void DoEffect(GameLogic logic, AbilityData ability, Card caster, Player target)
         {
+
+            Debug.Log("Fight");
             Player player = logic.GameData.GetPlayer(caster.player_id);
             int fireFighterCoordinate = caster.slot.x;
 

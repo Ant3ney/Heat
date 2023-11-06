@@ -24,10 +24,10 @@ public static class Utilities
                 new int[] {5, 13, 10, 0}, // coordinate 9
                 new int[] {6, 14, 11, 9}, // coordinate 10
                 new int[] {7, 15, 12, 10}, // coordinate 11
-                new int[] {8, 10, 0, 11}, // coordinate 12
+                new int[] {8, 16, 0, 11}, // coordinate 12
                 new int[] {9, 0, 14, 0}, // coordinate 13
                 new int[] {10, 18, 15, 13}, // coordinate 14
-                new int[] {11, 19, 10, 14}, // coordinate 15
+                new int[] {11, 19, 16, 14}, // coordinate 15
                 new int[] {12, 20, 17, 15}, // coordinate 16
                 new int[] {0, 26, 0, 16}, // coordinate 17
                 new int[] {14, 23, 19, 0}, // coordinate 18

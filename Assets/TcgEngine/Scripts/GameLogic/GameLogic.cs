@@ -669,7 +669,7 @@ namespace TcgEngine.Gameplay
             int drawAmount = player.is_ai ? 100 : nb;
             for (int i = 0; i < drawAmount; i++)
             {
-                if (player.cards_deck.Count > 0 && player.cards_hand.Count < GameplayData.Get().cards_max/*  || player.is_ai */)
+                if (player.cards_deck.Count > 0 && player.cards_hand.Count < GameplayData.Get().cards_max || (player.is_ai && player.cards_hand.Count < 20))
                 {
                     Card card = player.cards_deck[0];
                     /* if(!player.is_ai)  */

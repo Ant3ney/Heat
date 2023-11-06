@@ -45,7 +45,7 @@ namespace TcgEngine.AI
             List<AIAction> aiActions = new List<AIAction>();
             yield return new WaitForSeconds(1f);
             Game game_data = gameplay.GetGameData();
-            ai_logic.RunAI(game_data);
+            /* ai_logic.RunAI(game_data); */
             Player player = game_data.GetPlayer(game_data.current_player);
             while (ai_logic.IsRunning())
             {
