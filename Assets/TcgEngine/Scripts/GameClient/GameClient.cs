@@ -54,7 +54,7 @@ namespace TcgEngine.Client
         public UnityAction<Card, Player> onAttackPlayerEnd;
 
         public UnityAction<int, string> onChatMsg;  //player_id, msg
-        public UnityAction< string> onServerMsg;  //msg
+        public UnityAction<string> onServerMsg;  //msg
         public UnityAction onRefreshAll;
 
         private int player_id = 0; //Player playing on this device;

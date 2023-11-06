@@ -672,7 +672,8 @@ namespace TcgEngine.Gameplay
                 if (player.cards_deck.Count > 0 && player.cards_hand.Count < GameplayData.Get().cards_max/*  || player.is_ai */)
                 {
                     Card card = player.cards_deck[0];
-                    /* if(!player.is_ai)  */player.cards_deck.RemoveAt(0);
+                    /* if(!player.is_ai)  */
+                    player.cards_deck.RemoveAt(0);
                     player.cards_hand.Add(card);
                 }
             }

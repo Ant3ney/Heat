@@ -43,23 +43,17 @@ namespace TcgEngine.AI
         private IEnumerator AiTurn()
         {
             List<AIAction> aiActions = new List<AIAction>();
-            Debug.Log("AI Turn " + player_id + " Level " + ai_level);
-
             yield return new WaitForSeconds(1f);
-
-
             Game game_data = gameplay.GetGameData();
             ai_logic.RunAI(game_data);
-
             Player player = game_data.GetPlayer(game_data.current_player);
-            
-
             while (ai_logic.IsRunning())
             {
                 yield return new WaitForSeconds(0.1f);
             }
 
-            if(game_data.turn_count == 0 || game_data.turn_count == 1){
+            if (game_data.turn_count == 0 || game_data.turn_count == 1)
+            {
                 string card_hand_id = player.cards_hand[0].uid;
                 aiActions.Add(new AIAction());
                 aiActions.Add(new AIAction());
@@ -69,47 +63,41 @@ namespace TcgEngine.AI
 
                 //TODO: Make it so that the initial location is any valid slot
                 aiActions[0].slot = new Slot(6, 1, 0);
-
                 aiActions[1].type = GameAction.EndTurn;
                 Debug.Log("card_hand_id: " + card_hand_id);
             }
-            else{
+            else
+            {
                 List<int> slotsToBurn = ai_logic.getTilesToBurn(game_data);
                 int actionIndex = 0;
                 foreach (var slotCordinate in slotsToBurn)
                 {
-                    string card_hand_id = player.cards_hand[game_data.turn_count].uid;
-                    Debug.Log("card_hand_id: " + card_hand_id);
-                    Debug.Log("Slot to burn: " + slotCordinate);
+
                     aiActions.Add(new AIAction());
                     aiActions[actionIndex].type = GameAction.PlayCard;
-                    aiActions[actionIndex].card_uid = card_hand_id;
-                    aiActions[0].slot = new Slot(slotCordinate, 1, 0);
+                    aiActions[actionIndex].slot = new Slot(slotCordinate, 1, 0);
 
                     actionIndex++;
                 }
-                
+
                 aiActions.Add(new AIAction());
-                aiActions[actionIndex].type  = GameAction.EndTurn;
+                aiActions[actionIndex].type = GameAction.EndTurn;
             }
-
-            
-
 
             ai_logic.getTilesToBurn(game_data);
 
             if (aiActions != null)
             {
-                
+
                 //foreach (NodeState node in ai_logic.GetFirst().childs)
                 //   Debug.Log(ai_logic.GetNodePath(node));
 
                 /* ExecuteOrder(aiAction);
-                ExecuteOrder(new AIAction(GameAction.EndTurn)); */ 
+                ExecuteOrder(new AIAction(GameAction.EndTurn)); */
 
                 foreach (var aiAction in aiActions)
                 {
-                    Debug.Log("Execute AI Action: " + aiAction.GetText(game_data) + "\n" + ai_logic.GetNodePath());
+                    /* Debug.Log("Execute AI Action: " + aiAction.GetText(game_data) + "\n" + ai_logic.GetNodePath()); */
                     // Process each action
                     // For example, you might call a method on each action
                     yield return new WaitForSeconds(1f);
@@ -123,6 +111,29 @@ namespace TcgEngine.AI
 
             yield return new WaitForSeconds(0.5f);
             is_playing = false;
+        }
+
+        int getRandomValidSlotForFire(Game game_data, bool start = false)
+        {
+            // Get all empty slots
+            // filter out slots that are not adjacent to a fire
+            // filter out slots that are adjacent to fire fighters
+
+            List<int> validSlots = new List<int>();
+            List<int> adjacentFireSlots = new List<int>();
+            List<int> adjacentFireFighterSlots = new List<int>();
+
+            foreach (Slot slot in Slot.GetAll())
+            {
+                Card card = game_data.GetSlotCard(slot);
+                if (card == null)
+                {
+                    validSlots.Add(slot.x);
+                }
+            }
+
+            return 0;
+
         }
 
         private void Stop()
@@ -190,7 +201,7 @@ namespace TcgEngine.AI
 
             if (order.type == GameAction.EndTurn)
             {
-                
+
                 EndTurn();
             }
 
@@ -205,7 +216,7 @@ namespace TcgEngine.AI
             Game game_data = gameplay.GetGameData();
             Player player = game_data.GetPlayer(game_data.current_player);
             Card random = player.GetRandomCard(player.cards_hand, rand);
-            
+
             if (random != null)
             {
                 gameplay.PlayCard(random, slot);
