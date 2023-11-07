@@ -278,6 +278,7 @@ namespace TcgEngine.Gameplay
         {
             int count_alive = 0;
             Player alive = null;
+            Player humanPlayer = null;
             foreach (Player player in game_data.players)
             {
                 if (!player.IsDead())
@@ -285,6 +286,7 @@ namespace TcgEngine.Gameplay
                     alive = player;
                     count_alive++;
                 }
+                if(!player.is_ai) humanPlayer = player;
             }
 
             if (count_alive == 0)
@@ -295,6 +297,22 @@ namespace TcgEngine.Gameplay
             {
                 EndGame(alive.player_id); //Player win
             }
+
+            if(checkForNoFires() && game_data.turn_count > 2){
+                EndGame(humanPlayer.player_id);
+            }
+        }
+
+        //Checks the bord to see if no fire cards are preasent.
+        bool checkForNoFires(){
+            foreach(Slot slot in Slot.GetAll()){
+                Card cardOnSlot = game_data.GetSlotCard(slot);
+                if(cardOnSlot != null && cardOnSlot.card_id == "forest_fire"){
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         protected virtual void ClearTurnData()
