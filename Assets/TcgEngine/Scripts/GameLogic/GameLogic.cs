@@ -280,6 +280,7 @@ namespace TcgEngine.Gameplay
             int count_alive = 0;
             Player alive = null;
             Player humanPlayer = null;
+            Player aiPlayer = null;
             foreach (Player player in game_data.players)
             {
                 if (!player.IsDead())
@@ -288,6 +289,7 @@ namespace TcgEngine.Gameplay
                     count_alive++;
                 }
                 if(!player.is_ai) humanPlayer = player;
+                else aiPlayer = player;
             }
 
             if (count_alive == 0)
@@ -302,6 +304,19 @@ namespace TcgEngine.Gameplay
             if(checkForNoFires() && game_data.turn_count > 2){
                 EndGame(humanPlayer.player_id);
             }
+
+            if(checkFor3Burned()){
+                EndGame(aiPlayer.player_id);
+            }
+        }
+
+        bool checkFor3Burned(){
+            int burnedSlots = 0;
+            foreach(Slot slot in Slot.GetAll()){
+                if(slot.is_burned) burnedSlots++;
+                if(burnedSlots >= 3) return true;
+            }
+            return false;
         }
 
         //Checks the bord to see if no fire cards are preasent.

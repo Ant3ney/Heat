@@ -33,11 +33,14 @@ namespace TcgEngine
             Slot fireCordinateSlot = new Slot(fireCoordinate, 1, 0);
             if(real_caster_slot.health > 0){
                 int newHealth = real_caster_slot.health - 1;
+                bool just_died = newHealth < 1;
                 fireCordinateSlot.health = newHealth;
+                if(just_died) fireCordinateSlot.is_burned = true;
                 Slot.updateSlot(fireCordinateSlot, fireCoordinate); 
 
-                if(newHealth < 1){
+                if(just_died){
                     logic.DamageCard(caster, 99999); // Remove card
+
                 }
             }
             

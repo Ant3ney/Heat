@@ -28,12 +28,15 @@ namespace TcgEngine
         private static Dictionary<int, List<Slot>> player_slots = new Dictionary<int, List<Slot>>();
         private static List<Slot> all_slots = new List<Slot>();
 
+        public bool is_burned;
+
         public Slot(int pid)
         {
             this.x = 0;
             this.y = 0;
             this.p = pid;
             this.health = 5;    
+            this.is_burned = false;
         }
 
         public Slot(int x, int y, int pid)
@@ -42,6 +45,7 @@ namespace TcgEngine
             this.y = y;
             this.p = pid;
             this.health = 5;
+            this.is_burned = false;
         }
 
         public Slot(SlotXY slot, int pid)
@@ -50,6 +54,7 @@ namespace TcgEngine
             this.y = slot.y;
             this.p = pid;
             this.health = 5;
+            this.is_burned = false;
         }
 
         public bool IsInRangeX(Slot slot, int range)
