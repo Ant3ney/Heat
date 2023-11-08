@@ -217,6 +217,7 @@ namespace TcgEngine.Gameplay
 
         public virtual void EndTurn()
         {
+            Slot.toString();
             if (game_data.state == GameState.GameEnded)
                 return;
             if (game_data.phase != GamePhase.Main)
