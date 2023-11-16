@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { query } = require("../controllers/aiController");
+const { query } = require("../controllers/ai");
 
 router.post("/query", query);
 
