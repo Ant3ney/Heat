@@ -62,7 +62,7 @@ public static class Utilities
         return spreadOptions[center - 1];
     }
 
-    public static int GenerateSeverityIndex()
+    /* public static int GenerateSeverityIndex()
     {
         Random random = new Random();
 
@@ -95,11 +95,11 @@ public static class Utilities
             "IsolatedTorching",
             "Backing",
             "SingleTreeTorching",
-            "Flanking", XX
+            "Flanking", // XX
             "Running",
             "UphillRuns",
             "Spotting",
-            "WindDrivenRuns", XXX
+            "WindDrivenRuns", // XXX 
             "Torching",
             "ShortCrownRuns",
             "Crowning",
@@ -110,6 +110,6 @@ public static class Utilities
     public static string getSeverity()
     {
 
-    }
+    } */
 }
 
