@@ -54,40 +54,31 @@ public static class AIFetcher
         }
 
         // Send the POST request and wait for the response
-        try
-        {
-            var response = (HttpWebResponse)request.GetResponse();
 
-            // Check the status code
-            if (response.StatusCode == HttpStatusCode.OK)
+        var response = (HttpWebResponse)request.GetResponse();
+
+        // Check the status code
+        if (response.StatusCode == HttpStatusCode.OK)
+        {
+            // Read the response data
+            using (var reader = new StreamReader(response.GetResponseStream()))
             {
-                // Read the response data
-                using (var reader = new StreamReader(response.GetResponseStream()))
-                {
-                    string responseString = reader.ReadToEnd();
-                    Debug.Log("Res: " + responseString);
-                    responseString = "{\"coordinates\":" + responseString + "}";
-                    // Parse the response JSON into an array of strings
-                    CoordinatesWrapper coordinates = JsonUtility.FromJson<CoordinatesWrapper>(responseString);
-                    Debug.Log("Coordinates: " + coordinates);
-                    // Process the coordinates
-                    foreach (string coordinate in coordinates.coordinates)
-                    {
-                        Debug.Log("Coordinate: " + coordinate);
-                    }
-                }
-            }
-            else
-            {
-                Debug.LogError("Error sending POST request: " + response.StatusCode);
+                string responseString = reader.ReadToEnd();
+                Debug.Log("Res: " + responseString);
+                responseString = "{\"coordinates\":" + responseString + "}";
+                // Parse the response JSON into an array of strings
+                CoordinatesWrapper coordinates = JsonUtility.FromJson<CoordinatesWrapper>(responseString);
+                // Process the coordinates
+                Debug.Log("Coordinates: " + coordinates);
+                yield return coordinates.coordinates;
             }
         }
-        catch (WebException ex)
+        else
         {
-            Debug.LogError("Error sending POST request: " + ex.Message);
+            Debug.LogError("Error sending POST request: " + response.StatusCode);
+            yield return new string[0];
         }
 
-        yield return 0;
     }
 }
 
@@ -107,4 +98,13 @@ public struct FireSpreadItemRequestPayload
 public class CoordinatesWrapper
 {
     public string[] coordinates;
+    public override string ToString()
+    {
+        string result = "";
+        foreach (string coordinate in coordinates)
+        {
+            result += coordinate + ", ";
+        }
+        return result;
+    }
 }

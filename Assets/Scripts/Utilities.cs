@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public static class Utilities
 {
@@ -62,9 +63,9 @@ public static class Utilities
         return spreadOptions[center - 1];
     }
 
-    /* public static int GenerateSeverityIndex()
+    public static int GenerateSeverityIndex()
     {
-        Random random = new Random();
+        System.Random random = new System.Random();
 
         // Generates a number between 1 and 100
         int randomNumber = random.Next(1, 101);
@@ -105,11 +106,13 @@ public static class Utilities
             "Crowning",
             "GroupTorching",
         };
+
+        return severityOptions[index];
     }
 
     public static string getSeverity()
     {
-
-    } */
+        return indexToSeverity(GenerateSeverityIndex());
+    }
 }
 
