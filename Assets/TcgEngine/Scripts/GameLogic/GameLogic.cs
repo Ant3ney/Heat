@@ -217,7 +217,6 @@ namespace TcgEngine.Gameplay
 
         public virtual void EndTurn()
         {
-            Slot.toString();
             if (game_data.state == GameState.GameEnded)
                 return;
             if (game_data.phase != GamePhase.Main)
@@ -288,7 +287,7 @@ namespace TcgEngine.Gameplay
                     alive = player;
                     count_alive++;
                 }
-                if(!player.is_ai) humanPlayer = player;
+                if (!player.is_ai) humanPlayer = player;
                 else aiPlayer = player;
             }
 
@@ -301,29 +300,36 @@ namespace TcgEngine.Gameplay
                 EndGame(alive.player_id); //Player win
             }
 
-            if(checkForNoFires() && game_data.turn_count > 2){
+            if (checkForNoFires() && game_data.turn_count > 2)
+            {
                 EndGame(humanPlayer.player_id);
             }
 
-            if(checkFor3Burned()){
+            if (checkFor3Burned())
+            {
                 EndGame(aiPlayer.player_id);
             }
         }
 
-        bool checkFor3Burned(){
+        bool checkFor3Burned()
+        {
             int burnedSlots = 0;
-            foreach(Slot slot in Slot.GetAll()){
-                if(slot.is_burned) burnedSlots++;
-                if(burnedSlots >= 3) return true;
+            foreach (Slot slot in Slot.GetAll())
+            {
+                if (slot.is_burned) burnedSlots++;
+                if (burnedSlots >= 3) return true;
             }
             return false;
         }
 
         //Checks the bord to see if no fire cards are preasent.
-        bool checkForNoFires(){
-            foreach(Slot slot in Slot.GetAll()){
+        bool checkForNoFires()
+        {
+            foreach (Slot slot in Slot.GetAll())
+            {
                 Card cardOnSlot = game_data.GetSlotCard(slot);
-                if(cardOnSlot != null && cardOnSlot.card_id == "forest_fire"){
+                if (cardOnSlot != null && cardOnSlot.card_id == "forest_fire")
+                {
                     return false;
                 }
             }
@@ -1063,7 +1069,6 @@ namespace TcgEngine.Gameplay
             if (!caster.CanDoAbilities())
                 return; //Silenced card cant cast
 
-            //Debug.Log("Trigger Ability " + iability.id + " : " + caster.card_id);
 
             onAbilityStart?.Invoke(iability, caster);
             game_data.ability_triggerer = triggerer.uid;

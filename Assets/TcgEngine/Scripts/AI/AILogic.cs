@@ -134,6 +134,7 @@ namespace TcgEngine.AI
             List<int> slotsToBurn = new List<int>();
             List<int> slotsWithFireFighters = new List<int>();
             List<int> protectedSlots = new List<int>();
+            List<FireSpreadItemRequestPayload> spreadPayloads = new List<FireSpreadItemRequestPayload>();
 
             foreach (Slot slot in allSlots)
             {
@@ -161,6 +162,8 @@ namespace TcgEngine.AI
                 {
                     protectedSlots.Add(coordinate);
                 }
+
+                spreadPayloads.Add(new FireSpreadItemRequestPayload(slot, "low"));
             }
 
             int windDirectionIndex = Random.Range(0, 4);
@@ -175,7 +178,6 @@ namespace TcgEngine.AI
                 if (slotToBurnIsValid)
                 {
                     slotsToBurn.Add(slotToBurn);
-
                 }
             }
 
@@ -185,8 +187,6 @@ namespace TcgEngine.AI
             {
                 slotsToBurnString += slot + ", ";
             }
-
-            Debug.Log("Slots to burn: " + slotsToBurnString);
 
             return slotsToBurn;
         }

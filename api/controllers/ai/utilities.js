@@ -1,7 +1,5 @@
 const pl = require("tau-prolog");
 
-/* possible fire options */
-
 function consultSession(session) {
   return new Promise((res) => {
     session.consult(__dirname + "/betterfirebase.pl", {
@@ -78,6 +76,23 @@ async function getCoordinates(fires) {
 }
 
 function formatSeverity(severity) {
+  /* 
+    types of fires:    
+    Flanking
+    Smoldering
+    Running
+    Torching
+    Backing
+    UphillRuns
+    WindDrivenRuns
+    Spotting
+    IsolatedTorching
+    ShortrangeSpotting
+    ShortCrownRuns
+    SingleTreeTorching
+    Crowning
+    GroupTorching 
+*/
   switch (severity) {
     case "Backing":
       return "[B,a,c,k,i,n,g]";

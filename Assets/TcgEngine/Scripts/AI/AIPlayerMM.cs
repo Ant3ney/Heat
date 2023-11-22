@@ -67,7 +67,17 @@ namespace TcgEngine.AI
                 int randomStartingPoint = getRandomValidSlotForFire(game_data, true);
                 aiActions[0].slot = new Slot(randomStartingPoint, 1, 0);
                 aiActions[1].type = GameAction.EndTurn;
-                Debug.Log("card_hand_id: " + card_hand_id);
+                var fireSpreadItemRequestPayloads = new List<FireSpreadItemRequestPayload>{
+                    new FireSpreadItemRequestPayload(4, "Crowning"),
+                    new FireSpreadItemRequestPayload(9, "Backing")
+                };
+                Debug.Log("Trying");
+                IEnumerator testCoroutine = AIFetcher.fetchFireSpreadCoordinates(fireSpreadItemRequestPayloads);
+                yield return testCoroutine;
+                int result = (int)testCoroutine.Current; // Cast Current to int
+
+                Debug.Log("Result from test: " + result);
+                Debug.Log("Done");
             }
             else
             {
@@ -80,6 +90,11 @@ namespace TcgEngine.AI
                     spawnedSeasonFire = true;
                 }
                 List<int> slotsToBurn = ai_logic.getTilesToBurn(game_data);
+                var fireSpreadItemRequestPayloads = new List<FireSpreadItemRequestPayload>{
+                    new FireSpreadItemRequestPayload(4, "Crowning"),
+                    new FireSpreadItemRequestPayload(9, "Backing")
+                };
+                yield return AIFetcher.fetchFireSpreadCoordinates(fireSpreadItemRequestPayloads);
                 int actionIndex = spawnedSeasonFire ? 1 : 0;
                 foreach (var slotCordinate in slotsToBurn)
                 {

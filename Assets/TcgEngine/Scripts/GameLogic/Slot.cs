@@ -35,7 +35,7 @@ namespace TcgEngine
             this.x = 0;
             this.y = 0;
             this.p = pid;
-            this.health = 5;    
+            this.health = 5;
             this.is_burned = false;
         }
 
@@ -205,25 +205,32 @@ namespace TcgEngine
             get { return new Slot(0, 0, 0); }
         }
 
-        public static void toString(){
-            foreach(Slot slot in GetAll()){
+        public static void toString()
+        {
+            foreach (Slot slot in GetAll())
+            {
                 Debug.Log("x: " + slot.x + ", Health: " + slot.health);
             }
         }
 
-        public static void updateSlot(Slot newSlot, int x){
-            Debug.Log("New slot health: " + newSlot.health);
-            for(int i = 0; i < Slot.GetAll().Count; i++){ // Use for loop to iterate
-                if(Slot.GetAll()[i].x == x){
+        public static void updateSlot(Slot newSlot, int x)
+        {
+            for (int i = 0; i < Slot.GetAll().Count; i++)
+            { // Use for loop to iterate
+                if (Slot.GetAll()[i].x == x)
+                {
                     Slot.GetAll()[i] = newSlot; // Modify the list as needed
                     break; // If you expect only one slot to have the matching x, you can break after updating
                 }
             }
         }
 
-        public static void setHealth(int health, int x){
-            for(int i = 0; i < Slot.GetAll().Count; i++){ // Use for loop to iterate
-                if(Slot.GetAll()[i].x == x){
+        public static void setHealth(int health, int x)
+        {
+            for (int i = 0; i < Slot.GetAll().Count; i++)
+            { // Use for loop to iterate
+                if (Slot.GetAll()[i].x == x)
+                {
                     /* Slot.GetAll()[i].health = health; */ // Modify the list as needed
                     break; // If you expect only one slot to have the matching x, you can break after updating
                 }

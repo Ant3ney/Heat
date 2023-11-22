@@ -60,6 +60,56 @@ public static class Utilities
         };
 
         return spreadOptions[center - 1];
+    }
+
+    public static int GenerateSeverityIndex()
+    {
+        Random random = new Random();
+
+        // Generates a number between 1 and 100
+        int randomNumber = random.Next(1, 101);
+
+        if (randomNumber <= 10)
+        {
+            // 10%
+            return random.Next(9, 14);
+        }
+        else if (randomNumber <= 40)
+        {
+            // Additional 30%
+            return random.Next(5, 9);
+        }
+        else
+        {
+            // Remaining 60%
+            return random.Next(0, 5);
+        }
+    }
+
+    public static string indexToSeverity(int index)
+    {
+        string[] severityOptions = new string[]
+        {
+            "Creeping",
+            "Smoldering",
+            "IsolatedTorching",
+            "Backing",
+            "SingleTreeTorching",
+            "Flanking", XX
+            "Running",
+            "UphillRuns",
+            "Spotting",
+            "WindDrivenRuns", XXX
+            "Torching",
+            "ShortCrownRuns",
+            "Crowning",
+            "GroupTorching",
+        };
+    }
+
+    public static string getSeverity()
+    {
 
     }
 }
+

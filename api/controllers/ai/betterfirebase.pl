@@ -1,5 +1,4 @@
 % Define incidents for different FireBehaviorGeneral types
-incident(_,_,"Creeping").
 incident(_,_,"Flanking").
 incident(_,_,"Smoldering").
 incident(_,_,"Running").
@@ -7,7 +6,6 @@ incident(_,_,"Torching").
 incident(_,_,"Backing").
 incident(_,_,"Uphill Runs").
 incident(_,_,"Wind Driven Runs").
-incident(_,_,"Long-range Spotting").
 incident(_,_,"Spotting").
 incident(_,_,"Isolated Torching").
 incident(_,_,"Short-range Spotting").
