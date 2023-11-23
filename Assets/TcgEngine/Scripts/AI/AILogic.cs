@@ -172,40 +172,19 @@ namespace TcgEngine.AI
             IEnumerator fireSpreadCoroutine = AIFetcher.fetchFireSpreadCoordinates(spreadPayloads);
             yield return fireSpreadCoroutine;
             potentialSlotsToBurn = (string[])fireSpreadCoroutine.Current;
-            Debug.Log("AI logic Result: " + potentialSlotsToBurn);
+
 
             foreach (string slotString in potentialSlotsToBurn)
             {
-                Debug.Log("Slot string: " + slotString);
+
                 int slotToBurn = int.Parse(slotString);
                 bool notProtected = !protectedSlots.Any(slot => slot == slotToBurn);
-                bool slotToBurnIsValid = validSlots.Any(slot => slot.x == slotToBurn) && !slotsToBurn.Any(slot => slot == slotToBurn) && slotToBurn > 0 && notProtected;
+                bool slotToBurnIsValid = validSlots.Any(slot => slot.x == slotToBurn) && !slotsToBurn.Any(slot => slot == slotToBurn) && slotToBurn > 0 && notProtected && slotToBurn < 45;
                 if (slotToBurnIsValid)
                 {
                     slotsToBurn.Add(slotToBurn);
                 }
             }
-
-            /* foreach (Slot slot in slotsWithFire)
-            {
-                int coordinate = slot.x;
-                int[] availableSlotToBurn = temporaryFireSpreadAI(coordinate);
-                int slotToBurn = availableSlotToBurn[windDirectionIndex];
-                bool notProtected = !protectedSlots.Any(slot => slot == slotToBurn);
-                bool slotToBurnIsValid = validSlots.Any(slot => slot.x == slotToBurn) && !slotsToBurn.Any(slot => slot == slotToBurn) && slotToBurn > 0 && notProtected;
-                if (slotToBurnIsValid)
-                {
-                    slotsToBurn.Add(slotToBurn);
-                }
-            } */
-
-            string slotsToBurnString = "";
-
-            foreach (int slot in slotsToBurn)
-            {
-                slotsToBurnString += slot + ", ";
-            }
-            Debug.Log("Slot to burn: " + slotsToBurnString);
 
             yield return slotsToBurn;
         }

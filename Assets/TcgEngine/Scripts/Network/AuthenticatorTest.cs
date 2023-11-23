@@ -16,22 +16,36 @@ namespace TcgEngine
     {
         private UserData udata = null;
 
-        public override async Task<bool> Login(string username)
+        public override async Task<bool> Register(string username, string email, string password)
+        {
+            Debug.Log("Registering user " + username);
+            this.user_id = username;  //User username as ID for save file consistency when testing
+            this.username = username;
+            logged_in = true;
+            await Task.Yield(); //Do nothing
+            PlayerPrefs.SetString("tcg_user", username); //Save last user
+            PlayerPrefs.SetString("tcg_pass", password); //Save last password
+            RegisterResponse success = await ApiClient.Register(username, email, password);
+            return true;
+        }
+        public override async Task<bool> Login(string username, string password)
         {
             this.user_id = username;  //User username as ID for save file consistency when testing
             this.username = username;
             logged_in = true;
             await Task.Yield(); //Do nothing
             PlayerPrefs.SetString("tcg_user", username); //Save last user
+            PlayerPrefs.SetString("tcg_pass", password); //Save last password
             return true;
         }
 
         public override async Task<bool> RefreshLogin()
         {
             string username = PlayerPrefs.GetString("tcg_user", "");
-            if (!string.IsNullOrEmpty(username))
+            string password = PlayerPrefs.GetString("tcg_pass", "");
+            if (!string.IsNullOrEmpty(username) && !string.IsNullOrEmpty(password))
             {
-                bool success = await Login(username);
+                bool success = await Login(username, password);
                 return success;
             }
             return false;
@@ -46,7 +60,7 @@ namespace TcgEngine
                 udata = SaveTool.LoadFile<UserData>(file);
             }
 
-            if(udata == null)
+            if (udata == null)
             {
                 udata = new UserData();
                 udata.username = username;

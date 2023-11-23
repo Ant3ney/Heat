@@ -17,4 +17,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/TcgEngine/Scenes/Game/Game.unity
     guid: be2ace95e45905b49ad984cce7ea70e5
+  - enabled: 1
+    path: Assets/TcgEngine/Scenes/Game/Heat_Game.unity
+    guid: 5382b76756323404ebc4ce3d71459617
   m_configObjects: {}

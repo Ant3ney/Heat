@@ -8,6 +8,7 @@ using System.IO;
 using System.Text;
 public static class AIFetcher
 {
+    // Test just lets you know how to structure async functions that return a value
     public static IEnumerator test()
     {
         Debug.Log("Testing AI fetcher");
@@ -34,7 +35,6 @@ public static class AIFetcher
         }
 
         data += "]}";
-        Debug.Log(data);
 
         // Create the web request
         var request = (HttpWebRequest)WebRequest.Create(url);
@@ -64,12 +64,10 @@ public static class AIFetcher
             using (var reader = new StreamReader(response.GetResponseStream()))
             {
                 string responseString = reader.ReadToEnd();
-                Debug.Log("Res: " + responseString);
                 responseString = "{\"coordinates\":" + responseString + "}";
                 // Parse the response JSON into an array of strings
                 CoordinatesWrapper coordinates = JsonUtility.FromJson<CoordinatesWrapper>(responseString);
                 // Process the coordinates
-                Debug.Log("Coordinates: " + coordinates);
                 yield return coordinates.coordinates;
             }
         }

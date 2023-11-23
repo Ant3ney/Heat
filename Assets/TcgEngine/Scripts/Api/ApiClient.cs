@@ -4,6 +4,9 @@ using UnityEngine;
 using System.Threading.Tasks;
 using UnityEngine.Networking;
 using UnityEngine.Events;
+using System.Net;
+using System.IO;
+using System.Text;
 
 namespace TcgEngine
 {
@@ -46,7 +49,7 @@ namespace TcgEngine
         {
             //API client should be on OnDestroyOnLoad
             //dont assign here if already assigned cause new one will be destroyed in TheNetwork Awake
-            if(instance == null)
+            if (instance == null)
                 instance = this;
 
             LoadTokens();
@@ -105,14 +108,29 @@ namespace TcgEngine
             }
         }
 
-        public async Task<RegisterResponse> Register(string email, string user, string password)
+        public static async Task<RegisterResponse> Register(string email, string user, string password)
         {
-            RegisterRequest data = new RegisterRequest();
+            Debug.Log("Calling Register()");
+            string url = "https://heat.singularitydevelopment.com/user";
+            string jsonBody = "{\"email\":\"" + email + "\",\"displayName\":\"" + user + "\",\"password\":\"" + password + "\"}";
+
+            // Basically, JS fetch() in C#
+            UnityWebRequest request = WebRequest.Create(url, WebRequest.METHOD_POST, jsonBody, "no_token");
+
+            WebResponse response = await ApiClient.Get().SendRequest(request);
+            Debug.Log("Response: " + response);
+            Debug.Log("Response Data: " + response.data);
+
+            await Task.Yield(); //Do nothing
+            return new RegisterResponse();
+
+            /* RegisterRequest data = new RegisterRequest();
             data.email = email;
             data.username = user;
             data.password = password;
             data.avatar = "";
-            return await Register(data);
+            return await Register(data); */
+
         }
 
         public async Task<RegisterResponse> Register(RegisterRequest data)
@@ -406,7 +424,7 @@ namespace TcgEngine
         //Call it inside the login and loginrefresh functions after the api_version is set and return error if invalid
         public bool IsVersionValid()
         {
-            return ClientVersion == ServerVersion; 
+            return ClientVersion == ServerVersion;
         }
 
         public UserData UserData { get { return udata; } }

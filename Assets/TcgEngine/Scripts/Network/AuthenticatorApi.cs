@@ -46,7 +46,7 @@ namespace TcgEngine
 
         public override async Task<bool> Register(string username, string email, string password)
         {
-            RegisterResponse res = await Client.Register(username, email, password);
+            RegisterResponse res = await ApiClient.Register(username, email, password);
 
             if (res.success)
                 await Login(username, password);
