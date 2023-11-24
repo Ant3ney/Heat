@@ -52,12 +52,10 @@ const playerController = {
         return res.status(200).json({ players: foundPlayers });
       })
       .catch((err) => {
-        return res
-          .status(500)
-          .json({
-            message: "There was an error when trying to find all players",
-            error: err,
-          });
+        return res.status(500).json({
+          message: "There was an error when trying to find all players",
+          error: err,
+        });
       });
   },
   getPlayerById({ params }, res) {
@@ -104,10 +102,12 @@ const playerController = {
   },
   loginPlayer(req, res) {
     const { email, password } = req.body;
+    console.log(`Attempting to log in player '${email}'`);
     Player.findOne({ email })
       .select("-__v")
       .then((player) => {
         if (!player) {
+          console.log(`No player exists with the email '${email}'.`);
           return res.status(404).json({
             message: `No player exists with the email '${email}'.`,
           });
@@ -116,19 +116,25 @@ const playerController = {
         // Compare provided password with the one in the database
         bcrypt.compare(password, player.password, (err, isMatch) => {
           if (err) {
-            console.log(
-              "An error just hit you with a gust of wind! Move back 30ft in the direction of the attack."
+            console.error(
+              "An error just hit you with a gust of wind! Move back 30ft in the direction of the attack. Could not compare passwords.\n",
+              err
             );
             return res.status(500).json(err);
           }
 
           if (!isMatch) {
+            console.log("Invalid password provided for user:", email);
             return res.status(401).json({
               message: "Invalid password.",
             });
           }
 
           req.session.playerId = player._id;
+          console.log(
+            "Player logged in successfully! Returning player:",
+            email
+          );
           return res.status(200).json({
             message: `Player '${player.playername}' logged in successfully`,
             player: { ...player.toObject(), password: undefined },
