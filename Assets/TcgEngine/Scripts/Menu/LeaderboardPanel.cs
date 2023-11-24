@@ -70,7 +70,7 @@ namespace TcgEngine.UI
             foreach (RankLine line in lines)
                 line.Hide();
 
-            test_text.enabled = !Authenticator.Get().IsApi();
+            /* test_text.enabled = !Authenticator.Get().IsApi(); */
 
             if (!Authenticator.Get().IsApi())
                 return;

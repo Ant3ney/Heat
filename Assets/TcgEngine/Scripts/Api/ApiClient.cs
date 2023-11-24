@@ -152,6 +152,7 @@ namespace TcgEngine
         {
             Logout(); //Disconnect
 
+            Debug.Log("Calling Login()");
             LoginRequest data = new LoginRequest();
             data.password = password;
 
@@ -160,11 +161,14 @@ namespace TcgEngine
             else
                 data.username = user;
 
-            string url = ServerURL + "/auth";
-            string json = ApiTool.ToJson(data);
+            string url = "https://heat.singularitydevelopment.com/login";
+            string json = "{\"email\":\"" + data.email + "\",\"password\":\"" + data.password + "\"}";
 
             WebResponse res = await SendPostRequest(url, json);
             LoginResponse login_res = GetLoginRes(res);
+
+            Debug.Log("Res: " + res.data);
+
             AfterLogin(login_res);
 
             onLogin?.Invoke(login_res);

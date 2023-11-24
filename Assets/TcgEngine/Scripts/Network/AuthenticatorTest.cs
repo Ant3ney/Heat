@@ -33,10 +33,11 @@ namespace TcgEngine
             this.user_id = username;  //User username as ID for save file consistency when testing
             this.username = username;
             logged_in = true;
-            await Task.Yield(); //Do nothing
             PlayerPrefs.SetString("tcg_user", username); //Save last user
             PlayerPrefs.SetString("tcg_pass", password); //Save last password
-            return true;
+            LoginResponse res = await Client.Login(username, password);
+            Debug.Log("Login success: " + res.success);
+            return res.success;
         }
 
         public override async Task<bool> RefreshLogin()
@@ -94,5 +95,7 @@ namespace TcgEngine
         {
             return udata;
         }
+
+        public ApiClient Client { get { return ApiClient.Get(); } }
     }
 }
