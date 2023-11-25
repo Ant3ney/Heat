@@ -16,6 +16,8 @@ namespace TcgEngine
         public string id;
         public string username;
 
+        public string password;
+
         public string email;
         public string avatar;
         public string cardback;
@@ -37,6 +39,8 @@ namespace TcgEngine
         public string[] avatars;
         public string[] cardbacks;
         public string[] friends;
+
+        public string hand;
 
         public UserData()
         {
@@ -73,7 +77,7 @@ namespace TcgEngine
 
         public void SetDeck(UserDeckData deck)
         {
-            for(int i=0; i<decks.Length; i++)
+            for (int i = 0; i < decks.Length; i++)
             {
                 if (decks[i].tid == deck.tid)
                 {
@@ -206,7 +210,7 @@ namespace TcgEngine
                 AddCard(card.tid, card.variant, 1);
             }
         }
-    
+
         public void AddPack(string tid, int quantity)
         {
             bool found = false;
@@ -272,7 +276,7 @@ namespace TcgEngine
             return false;
         }
 
-        public bool HasPack(string pack_tid, int quantity=1)
+        public bool HasPack(string pack_tid, int quantity = 1)
         {
             foreach (UserCardData pack in packs)
             {
@@ -318,6 +322,13 @@ namespace TcgEngine
                 flist.Remove(username);
             friends = flist.ToArray();
         }
+
+        public string ToStringify()
+        {
+            hand = PlayerPrefs.GetString("tcg_deck_" + Authenticator.Get().Username, "");
+            password = PlayerPrefs.GetString("tcg_pass", "");
+            return JsonUtility.ToJson(this, true);
+        }
     }
 
     [System.Serializable]
@@ -328,7 +339,7 @@ namespace TcgEngine
         public UserCardData hero;
         public UserCardData[] cards;
 
-        public UserDeckData() {}
+        public UserDeckData() { }
 
         public UserDeckData(DeckData deck)
         {
@@ -375,6 +386,8 @@ namespace TcgEngine
                 return deck;
             }
         }
+
+
     }
 
     [System.Serializable]
@@ -386,7 +399,7 @@ namespace TcgEngine
 
         public UserCardData() { tid = ""; variant = ""; quantity = 1; }
         public UserCardData(string id, string v) { tid = id; variant = v; quantity = 1; }
-        public UserCardData(CardData card, VariantData variant) 
+        public UserCardData(CardData card, VariantData variant)
         {
             this.tid = card != null ? card.id : "";
             this.variant = variant != null ? variant.id : "";

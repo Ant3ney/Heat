@@ -79,6 +79,11 @@ namespace TcgEngine
                 string file = username + ".user";
                 SaveTool.SaveFile<UserData>(file, udata);
                 await Task.Yield(); //Do nothing
+
+                bool savedToAPI = await Client.SaveUserData(udata);
+                Debug.Log("Successfully saved user data to API is true?: " + savedToAPI);
+
+
                 return true;
             }
             return false;

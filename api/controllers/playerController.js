@@ -129,8 +129,12 @@ const playerController = {
               message: "Invalid password.",
             });
           }
+          try {
+            req.session.playerId = player._id;
+          } catch (err) {
+            console.log(err);
+          }
 
-          req.session.playerId = player._id;
           console.log(
             "Player logged in successfully! Returning player:",
             email
@@ -160,6 +164,56 @@ const playerController = {
         .status(200)
         .json({ message: "Player logged out successfully" });
     });
+  },
+  async updatePlayer(req, res) {
+    console.log("Attempting to update player");
+    const { tcgUserData } = req.body;
+    console.log("tcgUserData:", tcgUserData);
+
+    if (!tcgUserData) {
+      console.log("No tcgUserData provided...\nFailed to update player");
+      return res.status(400).json({ message: "No tcgUserData provided." });
+    }
+
+    const player = await getPlayerOfRequest(req);
+    if (!player) {
+      console.log("No player found in request");
+      return res.status(400).json({ message: "No player found in request" });
+    }
+
+    const newPlayer = transformTCGUserToPlayerSchema(
+      tcgUserData,
+      player.password
+    );
+
+    let successfullyUpdatedPlayer = null;
+
+    try {
+      successfullyUpdatedPlayer = await Player.findOneAndUpdate(
+        { email: player.email },
+        newPlayer
+      );
+    } catch (err) {
+      console.log(
+        "An error has occurred in updating player with new one. Flag 01!"
+      );
+      return res.status(400).json({ error: err });
+    }
+
+    if (!successfullyUpdatedPlayer) {
+      console.log(
+        "An error has occurred in updating player with new one. Flag 02!"
+      );
+      return res.status(400).json({
+        error: {
+          message:
+            "An error has occurred in updating player with new one. Flag 02!",
+        },
+      });
+    }
+
+    console.log("successfully updated player");
+    res.status(200).json({ message: "Player updated successfully" });
   },
   addCardToUnlocked({ params, body }, res) {
     const id = params.id;
@@ -310,5 +364,57 @@ const playerController = {
   },
   // purchaseCard
 };
+
+function transformTCGUserToPlayerSchema(tcgUser, passwordHash) {
+  const player = {
+    email: tcgUser.email || tcgUser.username || tcgUser.id,
+    password: passwordHash,
+    displayName: tcgUser.username,
+    scores: parseInt(tcgUser.victories),
+    balance: tcgUser.coins,
+    unlockedCards: tcgUser.cards,
+    equippedHand: tcgUser.hand,
+    packs: tcgUser.packs,
+    decks: tcgUser.decks,
+  };
+
+  return player;
+}
+
+// Will get player document object from request that has
+// Email and password in body
+async function getPlayerOfRequest(req) {
+  const { email, password, username, id } = req.body.tcgUserData || req.body;
+  const effectiveEmail = email || username || id;
+  if (!effectiveEmail || !password)
+    return console.log("No email or password provided in request body");
+
+  let playerObj = null;
+  try {
+    playerObj = await Player.findOne({ email: effectiveEmail })
+      .select("-__v")
+      .then();
+  } catch (err) {
+    console.log("Error when trying to find player by email");
+    return null;
+  }
+
+  if (!playerObj)
+    return console.log("No player found with email", effectiveEmail);
+
+  // Compare provided password with the one in the database
+  let isMatch = null;
+  try {
+    isMatch = await bcrypt.compare(password, playerObj.password).then();
+  } catch (err) {
+    console.log("Error when comparing passwords");
+    return null;
+  }
+
+  if (!isMatch)
+    return console.log("Invalid password provided for user:", effectiveEmail);
+
+  return playerObj;
+}
 
 module.exports = playerController;

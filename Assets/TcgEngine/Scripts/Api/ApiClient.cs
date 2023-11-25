@@ -112,7 +112,7 @@ namespace TcgEngine
         {
             Debug.Log("Calling Register()");
             string url = "https://heat.singularitydevelopment.com/user";
-            string jsonBody = "{\"email\":\"" + email + "\",\"displayName\":\"" + user + "\",\"password\":\"" + password + "\"}";
+            string jsonBody = "{\"email\":\"" + email + "\",\"displayName\":\"" + user + "\",\"password\":\"" + password + "\", \"unlockedCards\":\"[]\", \"equippedHand\":\"\"}";
 
             // Basically, JS fetch() in C#
             UnityWebRequest request = WebRequest.Create(url, WebRequest.METHOD_POST, jsonBody, "no_token");
@@ -161,7 +161,7 @@ namespace TcgEngine
             else
                 data.username = user;
 
-            string url = "https://heat.singularitydevelopment.com/login";
+            string url = "https://heat.singularitydevelopment.com/user/login";
             string json = "{\"email\":\"" + data.email + "\",\"password\":\"" + data.password + "\"}";
 
             WebResponse res = await SendPostRequest(url, json);
@@ -224,6 +224,21 @@ namespace TcgEngine
                 expired = false;
                 SaveTokens();
             }
+        }
+
+        public async Task<bool> SaveUserData(UserData userData)
+        {
+            Debug.Log("Saving UserData to API");
+            string JSONBody = "{\"tcgUserData\":" + userData.ToStringify() + "}";
+            string url = "https://heat.singularitydevelopment.com/user/update";
+
+            Debug.Log("Sending JSON: " + JSONBody);
+
+            WebResponse res = await SendPostRequest(url, JSONBody);
+            LoginResponse login_res = GetLoginRes(res);
+
+            Debug.Log("Res: " + res.data);
+            return res.success;
         }
 
         public async Task<UserData> LoadUserData()
