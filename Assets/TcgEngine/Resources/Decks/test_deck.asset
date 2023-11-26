@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: test_deck
   m_EditorClassIdentifier: 
   id: test_deck
-  title: Test Deck
+  title: Starter Deck
   hero: {fileID: 11400000, guid: cf170aea7ffb041428f37608f1561058, type: 2}
   cards:
   - {fileID: 11400000, guid: 0947aabc1e80f394ab6ed8175f0a2b02, type: 2}

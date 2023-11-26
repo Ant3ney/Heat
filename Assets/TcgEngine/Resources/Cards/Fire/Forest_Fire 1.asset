@@ -41,5 +41,5 @@ MonoBehaviour:
   deckbuilding: 1
   cost: 100
   packs:
-  - {fileID: 11400000, guid: bafca3757bf537c43b1d2ba696456e2c, type: 2}
-  - {fileID: 11400000, guid: 2db0d9f08bdfa57419101c08b8598c1a, type: 2}
+  - {fileID: 0}
+  - {fileID: 0}

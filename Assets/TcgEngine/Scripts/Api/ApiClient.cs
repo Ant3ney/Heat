@@ -110,16 +110,13 @@ namespace TcgEngine
 
         public static async Task<RegisterResponse> Register(string email, string user, string password)
         {
-            Debug.Log("Calling Register()");
             string url = "https://heat.singularitydevelopment.com/user";
-            string jsonBody = "{\"email\":\"" + email + "\",\"displayName\":\"" + user + "\",\"password\":\"" + password + "\", \"unlockedCards\":\"[]\", \"equippedHand\":\"\"}";
+            string jsonBody = "{\"email\":\"" + email + "\",\"displayName\":\"" + user + "\",\"password\":\"" + password + "\", \"unlockedCards\":\"[]\", \"equippedHand\":\"\", \"balance\": 10000}";
 
             // Basically, JS fetch() in C#
             UnityWebRequest request = WebRequest.Create(url, WebRequest.METHOD_POST, jsonBody, "no_token");
 
             WebResponse response = await ApiClient.Get().SendRequest(request);
-            Debug.Log("Response: " + response);
-            Debug.Log("Response Data: " + response.data);
 
             await Task.Yield(); //Do nothing
             return new RegisterResponse();
@@ -152,7 +149,17 @@ namespace TcgEngine
         {
             Logout(); //Disconnect
 
-            Debug.Log("Calling Login()");
+            WebResponse res = await getLoginResponse(user, password);
+            LoginResponse login_res = GetLoginRes(res);
+
+            AfterLogin(login_res);
+
+            onLogin?.Invoke(login_res);
+            return login_res;
+        }
+
+        public async Task<WebResponse> getLoginResponse(string user, string password)
+        {
             LoginRequest data = new LoginRequest();
             data.password = password;
 
@@ -165,14 +172,7 @@ namespace TcgEngine
             string json = "{\"email\":\"" + data.email + "\",\"password\":\"" + data.password + "\"}";
 
             WebResponse res = await SendPostRequest(url, json);
-            LoginResponse login_res = GetLoginRes(res);
-
-            Debug.Log("Res: " + res.data);
-
-            AfterLogin(login_res);
-
-            onLogin?.Invoke(login_res);
-            return login_res;
+            return res;
         }
 
         public async Task<LoginResponse> RefreshLogin()
@@ -228,38 +228,41 @@ namespace TcgEngine
 
         public async Task<bool> SaveUserData(UserData userData)
         {
-            Debug.Log("Saving UserData to API");
             string JSONBody = "{\"tcgUserData\":" + userData.ToStringify() + "}";
             string url = "https://heat.singularitydevelopment.com/user/update";
 
-            Debug.Log("Sending JSON: " + JSONBody);
-
             WebResponse res = await SendPostRequest(url, JSONBody);
             LoginResponse login_res = GetLoginRes(res);
-
-            Debug.Log("Res: " + res.data);
             return res.success;
         }
 
         public async Task<UserData> LoadUserData()
         {
-            udata = await LoadUserData(this.username);
+            string user = PlayerPrefs.GetString("tcg_user", "");
+            string password = PlayerPrefs.GetString("tcg_pass", "");
+
+            udata = await LoadUserData(user, password);
             return udata;
+        }
+
+        public async Task<UserData> LoadUserData(string username, string password)
+        {
+            WebResponse res = await getLoginResponse(username, password);
+
+
+            UserData user = UserData.FromLoginResJson(res.data);
+
+            Debug.Log("user.email: " + user.email);
+            return user;
         }
 
         public async Task<UserData> LoadUserData(string username)
         {
-            if (!IsConnected())
-                return null;
 
-            string url = ServerURL + "/users/" + username;
-            WebResponse res = await SendGetRequest(url);
+            string user = PlayerPrefs.GetString("tcg_user", "");
+            string password = PlayerPrefs.GetString("tcg_pass", "");
 
-            UserData udata = null;
-            if (res.success)
-            {
-                udata = ApiTool.JsonToObject<UserData>(res.data);
-            }
+            udata = await LoadUserData(user, password);
 
             return udata;
         }

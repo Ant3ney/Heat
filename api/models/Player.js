@@ -69,6 +69,7 @@ const PlayerSchema = new Schema({
       ],
     },
   ],
+  rewards: [String],
   // lastLogin: {
   //     type: Date,
   //     default: Date.now

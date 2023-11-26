@@ -16,7 +16,7 @@ namespace TcgEngine
     {
         private UserData udata = null;
 
-        public override async Task<bool> Register(string username, string email, string password)
+        public override async Task<bool> Register(string email, string username, string password)
         {
             Debug.Log("Registering user " + username);
             this.user_id = username;  //User username as ID for save file consistency when testing
@@ -24,8 +24,9 @@ namespace TcgEngine
             logged_in = true;
             await Task.Yield(); //Do nothing
             PlayerPrefs.SetString("tcg_user", username); //Save last user
+            PlayerPrefs.SetString("tcg_email", email); //Save last email
             PlayerPrefs.SetString("tcg_pass", password); //Save last password
-            RegisterResponse success = await ApiClient.Register(username, email, password);
+            RegisterResponse success = await ApiClient.Register(email, username, password);
             return true;
         }
         public override async Task<bool> Login(string username, string password)
@@ -55,8 +56,11 @@ namespace TcgEngine
         public override async Task<UserData> LoadUserData()
         {
             string user = PlayerPrefs.GetString("tcg_user", "");
-            string file = username + ".user";
-            if (!string.IsNullOrEmpty(user) && SaveTool.DoesFileExist(file))
+            string password = PlayerPrefs.GetString("tcg_pass", "");
+            /* string file = username + ".user"; */
+            UserData apiUserData = await Client.LoadUserData(user, password);
+
+            /* if (!string.IsNullOrEmpty(user) && SaveTool.DoesFileExist(file))
             {
                 udata = SaveTool.LoadFile<UserData>(file);
             }
@@ -68,8 +72,9 @@ namespace TcgEngine
                 udata.id = username;
             }
 
-            await Task.Yield(); //Do nothing
-            return udata;
+            await Task.Yield(); //Do nothing */
+            this.udata = apiUserData;
+            return apiUserData;
         }
 
         public override async Task<bool> SaveUserData()

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Threading.Tasks;
 
 namespace TcgEngine.UI
 {
@@ -182,6 +183,12 @@ namespace TcgEngine.UI
             RefreshDeckList();
         }
 
+        public void ReloadUserDecks(bool ignore_load)
+        {
+            MainMenu.Get().RefreshDeckList();
+            RefreshDeckList();
+        }
+
         //----- Refresh UI --------
 
         private void RefreshAll()
@@ -216,7 +223,7 @@ namespace TcgEngine.UI
             deck_list_panel.Hide();
             card_list_panel.Show();
         }
-        
+
         public void RefreshCards()
         {
             if (!spawned)
@@ -383,7 +390,7 @@ namespace TcgEngine.UI
                     if (deck.hero != null && btn.value == deck.hero.tid)
                         btn.Activate();
                 }
-                
+
                 for (int i = 0; i < deck.cards.Length; i++)
                 {
                     CardData card = CardData.Get(deck.cards[i].tid);
@@ -496,7 +503,7 @@ namespace TcgEngine.UI
                 {
                     ucard.quantity--;
 
-                    if(ucard.quantity <= 0)
+                    if (ucard.quantity <= 0)
                         deck_cards.RemoveAt(i);
                 }
             }
@@ -536,6 +543,7 @@ namespace TcgEngine.UI
         private async void SaveDeckTest(UserData udata, UserDeckData udeck)
         {
             udata.SetDeck(udeck);
+            Debug.Log("udata from Save Deck: " + udata.ToString());
             await Authenticator.Get().SaveUserData();
             ReloadUserDecks();
         }
@@ -704,7 +712,7 @@ namespace TcgEngine.UI
                 DeleteDeck(deck.tid);
             }
         }
-        
+
         // ---- Getters -----
 
         public int CountDeckCards(CardData card, VariantData cvariant)

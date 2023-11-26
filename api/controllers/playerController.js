@@ -5,7 +5,7 @@ const bcrypt = require("bcrypt");
 
 const playerController = {
   createPlayer({ body }, res) {
-    console.log("Attempting to create new player");
+    console.log('Attempting to create new player:"' + body.email + '"');
     const { password, ...otherBodyProps } = body;
     bcrypt.hash(password, 10, (err, hashedPassword) => {
       if (err) {
@@ -17,6 +17,7 @@ const playerController = {
 
       Player.create({ ...otherBodyProps, password: hashedPassword })
         .then((newPlayer) => {
+          console.log("Player created successfully:", newPlayer);
           return res.status(200).json({
             message: `Player '${body.playername}' created successfully`,
             player: newPlayer,
@@ -129,15 +130,15 @@ const playerController = {
               message: "Invalid password.",
             });
           }
-          try {
+          /* try {
             req.session.playerId = player._id;
           } catch (err) {
             console.log(err);
-          }
+          } */
 
           console.log(
             "Player logged in successfully! Returning player:",
-            email
+            player
           );
           return res.status(200).json({
             message: `Player '${player.playername}' logged in successfully`,
@@ -193,6 +194,7 @@ const playerController = {
         { email: player.email },
         newPlayer
       );
+      console.log("successfullyUpdatedPlayer: ", successfullyUpdatedPlayer);
     } catch (err) {
       console.log(
         "An error has occurred in updating player with new one. Flag 01!"
@@ -212,8 +214,11 @@ const playerController = {
       });
     }
 
-    console.log("successfully updated player");
-    res.status(200).json({ message: "Player updated successfully" });
+    console.log("successfully updated player to", newPlayer);
+    res.status(200).json({
+      message: "Player updated successfully",
+      player: newPlayer,
+    });
   },
   addCardToUnlocked({ params, body }, res) {
     const id = params.id;
@@ -376,6 +381,7 @@ function transformTCGUserToPlayerSchema(tcgUser, passwordHash) {
     equippedHand: tcgUser.hand,
     packs: tcgUser.packs,
     decks: tcgUser.decks,
+    rewards: tcgUser.rewards,
   };
 
   return player;

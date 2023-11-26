@@ -152,7 +152,7 @@ namespace TcgEngine.UI
             bool success = await Authenticator.Get().Register(register_email.text, register_username.text, register_password.text);
             if (success)
             {
-                login_user.text = register_username.text;
+                login_user.text = register_email.text;
                 login_password.text = register_password.text;
                 login_panel.Show();
                 register_panel.Hide();
@@ -176,7 +176,6 @@ namespace TcgEngine.UI
 
         public void OnClickRegister()
         {
-            Debug.Log("1111111111111111     Registering");
             if (string.IsNullOrWhiteSpace(register_username.text))
                 return;
             if (string.IsNullOrWhiteSpace(register_email.text))
@@ -187,8 +186,6 @@ namespace TcgEngine.UI
 
             if (clicked)
                 return;
-
-            Debug.Log("1111111111111111     Registering");
 
             Register(register_email.text, register_username.text, register_password.text);
         }

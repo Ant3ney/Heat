@@ -5,7 +5,7 @@ app.use(express.json());
 const port = process.env.PORT || 3011;
 
 const uri =
-  "mongodb+srv://afordm99:VAbiGK7nx26VILb3@heatgame.qos8kpx.mongodb.net/?retryWrites=true&w=majority";
+  "mongodb+srv://anthonycavuoti:zDzbQusUBCy5BQ3h@auth.bkpebfi.mongodb.net/?retryWrites=true&w=majority";
 
 const playerRouter = require("./routes/player");
 const aiRouter = require("./routes/ai");
