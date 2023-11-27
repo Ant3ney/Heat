@@ -110,7 +110,7 @@ namespace TcgEngine
 
         public static async Task<List<UserData>> getAllUsers()
         {
-            string url = "https://heat.singularitydevelopment.com/users";
+            string url = "https://heat.singularitydevelopment.com/user";
             WebResponse res = await ApiClient.Get().SendGetRequest(url);
 
             PlayerData[] players = ApiTool.JsonToArray<PlayerData>(res.data);

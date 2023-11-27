@@ -17,7 +17,7 @@ const playerController = {
 
       Player.create({ ...otherBodyProps, password: hashedPassword })
         .then((newPlayer) => {
-          console.log("Player created successfully:", newPlayer);
+          console.log("Player created successfully:");
           return res.status(200).json({
             message: `Player '${body.playername}' created successfully`,
             player: newPlayer,
@@ -52,7 +52,7 @@ const playerController = {
     Player.find()
       .then((foundPlayers) => {
         console.log("Num Players found:", foundPlayers.length);
-        return res.status(200).json({ players: foundPlayers });
+        return res.status(200).json(foundPlayers);
       })
       .catch((err) => {
         console.error(
@@ -142,10 +142,7 @@ const playerController = {
             console.log(err);
           } */
 
-          console.log(
-            "Player logged in successfully! Returning player:",
-            player
-          );
+          console.log("Player logged in successfully!");
           return res.status(200).json({
             message: `Player '${player.playername}' logged in successfully`,
             player: { ...player.toObject(), password: undefined },
