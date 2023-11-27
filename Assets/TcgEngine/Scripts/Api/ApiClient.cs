@@ -108,6 +108,28 @@ namespace TcgEngine
             }
         }
 
+        public static async Task<List<UserData>> getAllUsers()
+        {
+            string url = "https://heat.singularitydevelopment.com/users";
+            WebResponse res = await ApiClient.Get().SendGetRequest(url);
+
+            PlayerData[] players = ApiTool.JsonToArray<PlayerData>(res.data);
+            Debug.Log("res.data: " + res.data);
+            List<PlayerData> sorted_players = new List<PlayerData>(players);
+            sorted_players.Sort((PlayerData a, PlayerData b) => { return b.scores.CompareTo(a.scores); });
+
+            List<UserData> sorted_users = new List<UserData>();
+
+            for (int i = 0; i < sorted_players.Count; i++)
+            {
+                UserData newUser = UserData.FromPlayerData(sorted_players[i]);
+                sorted_users.Add(newUser);
+            }
+
+            return sorted_users;
+
+        }
+
         public static async Task<RegisterResponse> Register(string email, string user, string password)
         {
             string url = "https://heat.singularitydevelopment.com/user";

@@ -72,26 +72,27 @@ namespace TcgEngine.UI
 
             /* test_text.enabled = !Authenticator.Get().IsApi(); */
 
-            if (!Authenticator.Get().IsApi())
-                return;
+            /* if (!Authenticator.Get().IsApi())
+                return; */
 
             UserData udata = ApiClient.Get().UserData;
 
             int index = 0;
-            string url = ApiClient.ServerURL + "/users";
-            WebResponse res = await ApiClient.Get().SendGetRequest(url);
+            List<UserData> sorted_users = await ApiClient.getAllUsers();
 
-            UserData[] users = ApiTool.JsonToArray<UserData>(res.data);
-            List<UserData> sorted_users = new List<UserData>(users);
-            sorted_users.Sort((UserData a, UserData b) => { return b.elo.CompareTo(a.elo); });
+            /*  UserData[] users = ApiTool.JsonToArray<UserData>(res.data);
+             List<UserData> sorted_users = new List<UserData>(users);
+             sorted_users.Sort((UserData a, UserData b) => { return b.elo.CompareTo(a.elo); }); */
 
-            int previous_rank = 0;
-            int previous_index = 0;
+            /* int previous_rank = 0;
+            int previous_index = 0; */
+
+            Debug.Log("Getting users");
 
             foreach (UserData user in sorted_users)
             {
-                if (user.permission_level != 1 || user.matches == 0)
-                    continue; //Dont show admins and user with no matches
+                /* if (user.permission_level != 1 || user.matches == 0)
+                    continue; //Dont show admins and user with no matches */
 
                 if (user.username == udata.username)
                 {
@@ -101,10 +102,10 @@ namespace TcgEngine.UI
                 if (index < lines.Count)
                 {
                     RankLine line = lines[index];
-                    int rank_order = (previous_rank == user.elo) ? previous_index : index;
+                    int rank_order = /* (previous_rank == user.elo) ? previous_index : */ index;
                     line.SetLine(user, rank_order + 1, user.username == udata.username);
-                    previous_rank = user.elo;
-                    previous_index = rank_order;
+                    /* previous_rank = user.elo; */
+                    /* previous_index = rank_order; */
                 }
 
                 index++;
