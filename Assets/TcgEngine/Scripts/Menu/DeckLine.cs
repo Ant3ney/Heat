@@ -68,7 +68,7 @@ namespace TcgEngine.UI
                 cost.value = card.mana;
             if (this.value != null)
                 this.value.color = invalid ? Color.red : Color.white;
-            if(invalid)
+            if (invalid)
                 title.color = Color.gray;
 
             if (image != null)

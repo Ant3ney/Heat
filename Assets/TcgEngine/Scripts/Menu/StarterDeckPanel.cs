@@ -69,10 +69,14 @@ namespace TcgEngine.UI
             udata.AddDeck(udeck);
             udata.AddReward(udeck.tid);
 
+
             await Authenticator.Get().SaveUserData();
 
-            CollectionPanel.Get().ReloadUserDecks();
+
+            CollectionPanel.Get().ReloadUserDecks(true);
+
             Hide();
+
         }
 
         private async void ChooseDeckApi(string deck_id)
@@ -101,7 +105,7 @@ namespace TcgEngine.UI
         public override void Show(bool instant = false)
         {
             base.Show(instant);
-            if(error != null)
+            if (error != null)
                 error.text = "";
             RefreshPanel();
         }

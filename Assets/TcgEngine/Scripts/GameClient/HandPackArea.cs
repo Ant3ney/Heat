@@ -66,6 +66,7 @@ namespace TcgEngine.Client
         public void RefreshPacks()
         {
             UserData udata = Authenticator.Get().UserData;
+            Debug.Log("Local udata: " + udata);
 
             foreach (UserCardData pack in udata.packs)
             {

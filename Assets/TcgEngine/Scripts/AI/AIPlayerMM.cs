@@ -39,23 +39,15 @@ namespace TcgEngine.AI
                 Stop();
         }
 
-        // Start implementing AI here
         private IEnumerator AiTurn()
         {
             List<AIAction> aiActions = new List<AIAction>();
-            yield return new WaitForSeconds(1f);
             Game game_data = gameplay.GetGameData();
-            ai_logic.RunAI(game_data);
             Player player = game_data.GetPlayer(game_data.current_player);
-            while (ai_logic.IsRunning())
-            {
-                yield return new WaitForSeconds(0.1f);
-            }
 
+            // Initial turns
             if (game_data.turn_count == 0 || game_data.turn_count == 1)
             {
-
-
                 string card_hand_id = player.cards_hand[0].uid;
                 aiActions.Add(new AIAction());
                 aiActions.Add(new AIAction());
@@ -63,14 +55,15 @@ namespace TcgEngine.AI
                 aiActions[0].type = GameAction.PlayCard;
                 aiActions[0].card_uid = card_hand_id;
 
-                //TODO: Make it so that the initial location is any valid slot
                 int randomStartingPoint = getRandomValidSlotForFire(game_data, true);
                 aiActions[0].slot = new Slot(randomStartingPoint, 1, 0);
                 aiActions[1].type = GameAction.EndTurn;
-                Debug.Log("card_hand_id: " + card_hand_id);
             }
+
+            // Subsequent turns
             else
             {
+                // Determine if we should spawn a random fire on board called season fire
                 bool spawnedSeasonFire = false;
                 if (game_data.startSeasonFire())
                 {
@@ -79,11 +72,16 @@ namespace TcgEngine.AI
                     aiActions[0].slot = new Slot(getRandomValidSlotForFire(game_data), 1, 0);
                     spawnedSeasonFire = true;
                 }
-                List<int> slotsToBurn = ai_logic.getTilesToBurn(game_data);
+
+                // Get all tiles to burn
+                // Calls Async code in synchronous way
+                IEnumerator slotsToBurnCoroutine = ai_logic.getTilesToBurn(game_data);
+                yield return slotsToBurnCoroutine;
+                List<int> slotsToBurn = (List<int>)slotsToBurnCoroutine.Current;
+
                 int actionIndex = spawnedSeasonFire ? 1 : 0;
                 foreach (var slotCordinate in slotsToBurn)
                 {
-
                     aiActions.Add(new AIAction());
                     aiActions[actionIndex].type = GameAction.PlayCard;
                     aiActions[actionIndex].slot = new Slot(slotCordinate, 1, 0);
@@ -95,27 +93,10 @@ namespace TcgEngine.AI
                 aiActions[actionIndex].type = GameAction.EndTurn;
             }
 
-            ai_logic.getTilesToBurn(game_data);
-
-            if (aiActions != null)
+            foreach (var aiAction in aiActions)
             {
-
-                //foreach (NodeState node in ai_logic.GetFirst().childs)
-                //   Debug.Log(ai_logic.GetNodePath(node));
-
-                /* ExecuteOrder(aiAction);
-                ExecuteOrder(new AIAction(GameAction.EndTurn)); */
-
-                foreach (var aiAction in aiActions)
-                {
-                    /* Debug.Log("Execute AI Action: " + aiAction.GetText(game_data) + "\n" + ai_logic.GetNodePath()); */
-                    // Process each action
-                    // For example, you might call a method on each action
-                    yield return new WaitForSeconds(1f);
-                    ExecuteOrder(aiAction);
-                }
-
-
+                yield return new WaitForSeconds(0.5f);
+                ExecuteOrder(aiAction);
             }
 
             ai_logic.ClearMemory();
@@ -167,7 +148,6 @@ namespace TcgEngine.AI
             }
 
             return validSlots[Random.Range(0, validSlots.Count)];
-
         }
 
         private void Stop()

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public static class Utilities
 {
@@ -24,10 +25,10 @@ public static class Utilities
                 new int[] {5, 13, 10, 0}, // coordinate 9
                 new int[] {6, 14, 11, 9}, // coordinate 10
                 new int[] {7, 15, 12, 10}, // coordinate 11
-                new int[] {8, 10, 0, 11}, // coordinate 12
+                new int[] {8, 16, 0, 11}, // coordinate 12
                 new int[] {9, 0, 14, 0}, // coordinate 13
                 new int[] {10, 18, 15, 13}, // coordinate 14
-                new int[] {11, 19, 10, 14}, // coordinate 15
+                new int[] {11, 19, 16, 14}, // coordinate 15
                 new int[] {12, 20, 17, 15}, // coordinate 16
                 new int[] {0, 26, 0, 16}, // coordinate 17
                 new int[] {14, 23, 19, 0}, // coordinate 18
@@ -60,6 +61,58 @@ public static class Utilities
         };
 
         return spreadOptions[center - 1];
+    }
 
+    public static int GenerateSeverityIndex()
+    {
+        System.Random random = new System.Random();
+
+        // Generates a number between 1 and 100
+        int randomNumber = random.Next(1, 101);
+
+        if (randomNumber <= 10)
+        {
+            // 10%
+            return random.Next(9, 14);
+        }
+        else if (randomNumber <= 40)
+        {
+            // Additional 30%
+            return random.Next(5, 9);
+        }
+        else
+        {
+            // Remaining 60%
+            return random.Next(0, 5);
+        }
+    }
+
+    public static string indexToSeverity(int index)
+    {
+        string[] severityOptions = new string[]
+        {
+            "Creeping",
+            "Smoldering",
+            "IsolatedTorching",
+            "Backing",
+            "SingleTreeTorching",
+            "Flanking", // XX
+            "Running",
+            "UphillRuns",
+            "Spotting",
+            "WindDrivenRuns", // XXX 
+            "Torching",
+            "ShortCrownRuns",
+            "Crowning",
+            "GroupTorching",
+        };
+
+        return severityOptions[index];
+    }
+
+    public static string getSeverity()
+    {
+        return indexToSeverity(GenerateSeverityIndex());
     }
 }
+

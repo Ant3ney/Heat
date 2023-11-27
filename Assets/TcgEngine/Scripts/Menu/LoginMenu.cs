@@ -47,12 +47,12 @@ namespace TcgEngine.UI
             AudioTool.Get().PlayMusic("music", music);
             BlackPanel.Get().Show(true);
             error_msg.text = "";
-            test_area.SetActive(Authenticator.Get().IsTest());
+            /* test_area.SetActive(Authenticator.Get().IsTest()); */
 
             string user = PlayerPrefs.GetString("tcg_last_user", "");
             login_user.text = user;
 
-            if (Authenticator.Get().IsTest())
+            /* if (Authenticator.Get().IsTest())
             {
                 login_password.gameObject.SetActive(false);
                 login_bottom.SetActive(false);
@@ -60,7 +60,7 @@ namespace TcgEngine.UI
             else if (!string.IsNullOrEmpty(user))
             {
                 SelectField(login_password);
-            }
+            } */
 
             RefreshLogin();
         }
@@ -129,6 +129,7 @@ namespace TcgEngine.UI
             clicked = true;
             error_msg.text = "";
 
+            Debug.Log("Logging in...");
             bool success = await Authenticator.Get().Login(user, password);
             if (success)
             {
@@ -144,13 +145,14 @@ namespace TcgEngine.UI
 
         private async void Register(string email, string user, string password)
         {
+            Debug.Log("Regestering");
             clicked = true;
             error_msg.text = "";
 
             bool success = await Authenticator.Get().Register(register_email.text, register_username.text, register_password.text);
             if (success)
             {
-                login_user.text = register_username.text;
+                login_user.text = register_email.text;
                 login_password.text = register_password.text;
                 login_panel.Show();
                 register_panel.Hide();

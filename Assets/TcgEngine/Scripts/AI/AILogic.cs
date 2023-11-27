@@ -126,7 +126,7 @@ namespace TcgEngine.AI
             running = false;
         }
 
-        public List<int> getTilesToBurn(Game data)
+        public IEnumerator getTilesToBurn(Game data)
         {
             List<Slot> allSlots = Slot.GetAll();
             List<Slot> slotsWithFire = new List<Slot>();
@@ -134,6 +134,8 @@ namespace TcgEngine.AI
             List<int> slotsToBurn = new List<int>();
             List<int> slotsWithFireFighters = new List<int>();
             List<int> protectedSlots = new List<int>();
+            List<FireSpreadItemRequestPayload> spreadPayloads = new List<FireSpreadItemRequestPayload>();
+            string[] potentialSlotsToBurn;
 
             foreach (Slot slot in allSlots)
             {
@@ -147,6 +149,7 @@ namespace TcgEngine.AI
                 else if (id == "forest_fire")
                 {
                     slotsWithFire.Add(slot);
+                    spreadPayloads.Add(new FireSpreadItemRequestPayload(slot.x, Utilities.getSeverity()));
                 }
                 else if (id == "dale_hudson")
                 {
@@ -161,34 +164,29 @@ namespace TcgEngine.AI
                 {
                     protectedSlots.Add(coordinate);
                 }
+
+                spreadPayloads.Add(new FireSpreadItemRequestPayload(slot, "low"));
             }
 
             int windDirectionIndex = Random.Range(0, 4);
+            IEnumerator fireSpreadCoroutine = AIFetcher.fetchFireSpreadCoordinates(spreadPayloads);
+            yield return fireSpreadCoroutine;
+            potentialSlotsToBurn = (string[])fireSpreadCoroutine.Current;
 
-            foreach (Slot slot in slotsWithFire)
+
+            foreach (string slotString in potentialSlotsToBurn)
             {
-                int coordinate = slot.x;
-                int[] availableSlotToBurn = temporaryFireSpreadAI(coordinate);
-                int slotToBurn = availableSlotToBurn[windDirectionIndex];
+
+                int slotToBurn = int.Parse(slotString);
                 bool notProtected = !protectedSlots.Any(slot => slot == slotToBurn);
-                bool slotToBurnIsValid = validSlots.Any(slot => slot.x == slotToBurn) && !slotsToBurn.Any(slot => slot == slotToBurn) && slotToBurn > 0 && notProtected;
+                bool slotToBurnIsValid = validSlots.Any(slot => slot.x == slotToBurn) && !slotsToBurn.Any(slot => slot == slotToBurn) && slotToBurn > 0 && notProtected && slotToBurn < 45;
                 if (slotToBurnIsValid)
                 {
                     slotsToBurn.Add(slotToBurn);
-
                 }
             }
 
-            string slotsToBurnString = "";
-
-            foreach (int slot in slotsToBurn)
-            {
-                slotsToBurnString += slot + ", ";
-            }
-
-            Debug.Log("Slots to burn: " + slotsToBurnString);
-
-            return slotsToBurn;
+            yield return slotsToBurn;
         }
 
         private int[] temporaryFireSpreadAI(int center)

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   url: server.tcgengine.com
   port: 8777
-  api_url: api.tcgengine.com
+  api_url: https://heat.singularitydevelopment.com
   api_https: 1
   solo_type: 0
   auth_type: 0

@@ -278,6 +278,8 @@ namespace TcgEngine.Gameplay
         {
             int count_alive = 0;
             Player alive = null;
+            Player humanPlayer = null;
+            Player aiPlayer = null;
             foreach (Player player in game_data.players)
             {
                 if (!player.IsDead())
@@ -285,6 +287,8 @@ namespace TcgEngine.Gameplay
                     alive = player;
                     count_alive++;
                 }
+                if (!player.is_ai) humanPlayer = player;
+                else aiPlayer = player;
             }
 
             if (count_alive == 0)
@@ -295,6 +299,42 @@ namespace TcgEngine.Gameplay
             {
                 EndGame(alive.player_id); //Player win
             }
+
+            if (checkForNoFires() && game_data.turn_count > 2)
+            {
+                EndGame(humanPlayer.player_id);
+            }
+
+            if (checkFor3Burned())
+            {
+                EndGame(aiPlayer.player_id);
+            }
+        }
+
+        bool checkFor3Burned()
+        {
+            int burnedSlots = 0;
+            foreach (Slot slot in Slot.GetAll())
+            {
+                if (slot.is_burned) burnedSlots++;
+                if (burnedSlots >= 3) return true;
+            }
+            return false;
+        }
+
+        //Checks the bord to see if no fire cards are preasent.
+        bool checkForNoFires()
+        {
+            foreach (Slot slot in Slot.GetAll())
+            {
+                Card cardOnSlot = game_data.GetSlotCard(slot);
+                if (cardOnSlot != null && cardOnSlot.card_id == "forest_fire")
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         protected virtual void ClearTurnData()
@@ -669,7 +709,7 @@ namespace TcgEngine.Gameplay
             int drawAmount = player.is_ai ? 100 : nb;
             for (int i = 0; i < drawAmount; i++)
             {
-                if (player.cards_deck.Count > 0 && player.cards_hand.Count < GameplayData.Get().cards_max/*  || player.is_ai */)
+                if (player.cards_deck.Count > 0 && player.cards_hand.Count < GameplayData.Get().cards_max || (player.is_ai && player.cards_hand.Count < 20))
                 {
                     Card card = player.cards_deck[0];
                     /* if(!player.is_ai)  */
@@ -1029,7 +1069,6 @@ namespace TcgEngine.Gameplay
             if (!caster.CanDoAbilities())
                 return; //Silenced card cant cast
 
-            //Debug.Log("Trigger Ability " + iability.id + " : " + caster.card_id);
 
             onAbilityStart?.Invoke(iability, caster);
             game_data.ability_triggerer = triggerer.uid;

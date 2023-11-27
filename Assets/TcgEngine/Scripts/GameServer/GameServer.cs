@@ -205,6 +205,7 @@ namespace TcgEngine.Server
                 }
             }
 
+            Debug.Log("Starting Game");
             //Start Game
             gameplay.StartGame();
         }

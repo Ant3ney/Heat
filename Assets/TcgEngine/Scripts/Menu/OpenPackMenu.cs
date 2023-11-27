@@ -58,7 +58,7 @@ namespace TcgEngine.Client
                 OpenPackTest(pack);
             }
         }
-        
+
         public async void OpenPackTest(PackData pack)
         {
             UserData udata = Authenticator.Get().UserData;
@@ -66,7 +66,7 @@ namespace TcgEngine.Client
                 return;
 
             List<UserCardData> cards = new List<UserCardData>();
-            List <CardData> all_cards = CardData.GetAll(pack);
+            List<CardData> all_cards = CardData.GetAll(pack);
 
             if (pack.type == PackType.Random)
             {
@@ -101,6 +101,7 @@ namespace TcgEngine.Client
                 udata.AddCard(card.tid, card.variant, card.quantity);
             }
 
+            // Implement API call here
             await Authenticator.Get().SaveUserData();
             RevealCards(pack, cards.ToArray());
             HandPackArea.Get().LoadPacks();
@@ -152,7 +153,7 @@ namespace TcgEngine.Client
             }
         }
 
-        private List<CardData> GetCardArray(List<CardData>  all_cards, RarityData rarity)
+        private List<CardData> GetCardArray(List<CardData> all_cards, RarityData rarity)
         {
             List<CardData> cards = new List<CardData>();
             foreach (CardData acard in all_cards)

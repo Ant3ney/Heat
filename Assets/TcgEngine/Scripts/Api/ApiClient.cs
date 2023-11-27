@@ -4,6 +4,9 @@ using UnityEngine;
 using System.Threading.Tasks;
 using UnityEngine.Networking;
 using UnityEngine.Events;
+using System.Net;
+using System.IO;
+using System.Text;
 
 namespace TcgEngine
 {
@@ -46,7 +49,7 @@ namespace TcgEngine
         {
             //API client should be on OnDestroyOnLoad
             //dont assign here if already assigned cause new one will be destroyed in TheNetwork Awake
-            if(instance == null)
+            if (instance == null)
                 instance = this;
 
             LoadTokens();
@@ -105,14 +108,26 @@ namespace TcgEngine
             }
         }
 
-        public async Task<RegisterResponse> Register(string email, string user, string password)
+        public static async Task<RegisterResponse> Register(string email, string user, string password)
         {
-            RegisterRequest data = new RegisterRequest();
+            string url = "https://heat.singularitydevelopment.com/user";
+            string jsonBody = "{\"email\":\"" + email + "\",\"displayName\":\"" + user + "\",\"password\":\"" + password + "\", \"unlockedCards\":\"[]\", \"equippedHand\":\"\", \"balance\": 10000}";
+
+            // Basically, JS fetch() in C#
+            UnityWebRequest request = WebRequest.Create(url, WebRequest.METHOD_POST, jsonBody, "no_token");
+
+            WebResponse response = await ApiClient.Get().SendRequest(request);
+
+            await Task.Yield(); //Do nothing
+            return new RegisterResponse();
+
+            /* RegisterRequest data = new RegisterRequest();
             data.email = email;
             data.username = user;
             data.password = password;
             data.avatar = "";
-            return await Register(data);
+            return await Register(data); */
+
         }
 
         public async Task<RegisterResponse> Register(RegisterRequest data)
@@ -134,6 +149,17 @@ namespace TcgEngine
         {
             Logout(); //Disconnect
 
+            WebResponse res = await getLoginResponse(user, password);
+            LoginResponse login_res = GetLoginRes(res);
+
+            AfterLogin(login_res);
+
+            onLogin?.Invoke(login_res);
+            return login_res;
+        }
+
+        public async Task<WebResponse> getLoginResponse(string user, string password)
+        {
             LoginRequest data = new LoginRequest();
             data.password = password;
 
@@ -142,15 +168,11 @@ namespace TcgEngine
             else
                 data.username = user;
 
-            string url = ServerURL + "/auth";
-            string json = ApiTool.ToJson(data);
+            string url = "https://heat.singularitydevelopment.com/user/login";
+            string json = "{\"email\":\"" + data.email + "\",\"password\":\"" + data.password + "\"}";
 
             WebResponse res = await SendPostRequest(url, json);
-            LoginResponse login_res = GetLoginRes(res);
-            AfterLogin(login_res);
-
-            onLogin?.Invoke(login_res);
-            return login_res;
+            return res;
         }
 
         public async Task<LoginResponse> RefreshLogin()
@@ -204,25 +226,43 @@ namespace TcgEngine
             }
         }
 
+        public async Task<bool> SaveUserData(UserData userData)
+        {
+            string JSONBody = "{\"tcgUserData\":" + userData.ToStringify() + "}";
+            string url = "https://heat.singularitydevelopment.com/user/update";
+
+            WebResponse res = await SendPostRequest(url, JSONBody);
+            LoginResponse login_res = GetLoginRes(res);
+            return res.success;
+        }
+
         public async Task<UserData> LoadUserData()
         {
-            udata = await LoadUserData(this.username);
+            string user = PlayerPrefs.GetString("tcg_user", "");
+            string password = PlayerPrefs.GetString("tcg_pass", "");
+
+            udata = await LoadUserData(user, password);
             return udata;
+        }
+
+        public async Task<UserData> LoadUserData(string username, string password)
+        {
+            WebResponse res = await getLoginResponse(username, password);
+
+
+            UserData user = UserData.FromLoginResJson(res.data);
+
+            Debug.Log("user.email: " + user.email);
+            return user;
         }
 
         public async Task<UserData> LoadUserData(string username)
         {
-            if (!IsConnected())
-                return null;
 
-            string url = ServerURL + "/users/" + username;
-            WebResponse res = await SendGetRequest(url);
+            string user = PlayerPrefs.GetString("tcg_user", "");
+            string password = PlayerPrefs.GetString("tcg_pass", "");
 
-            UserData udata = null;
-            if (res.success)
-            {
-                udata = ApiTool.JsonToObject<UserData>(res.data);
-            }
+            udata = await LoadUserData(user, password);
 
             return udata;
         }
@@ -406,7 +446,7 @@ namespace TcgEngine
         //Call it inside the login and loginrefresh functions after the api_version is set and return error if invalid
         public bool IsVersionValid()
         {
-            return ClientVersion == ServerVersion; 
+            return ClientVersion == ServerVersion;
         }
 
         public UserData UserData { get { return udata; } }

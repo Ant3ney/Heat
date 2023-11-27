@@ -16,6 +16,8 @@ namespace TcgEngine
         public string id;
         public string username;
 
+        public string password;
+
         public string email;
         public string avatar;
         public string cardback;
@@ -37,6 +39,8 @@ namespace TcgEngine
         public string[] avatars;
         public string[] cardbacks;
         public string[] friends;
+
+        public string hand;
 
         public UserData()
         {
@@ -73,7 +77,7 @@ namespace TcgEngine
 
         public void SetDeck(UserDeckData deck)
         {
-            for(int i=0; i<decks.Length; i++)
+            for (int i = 0; i < decks.Length; i++)
             {
                 if (decks[i].tid == deck.tid)
                 {
@@ -206,7 +210,7 @@ namespace TcgEngine
                 AddCard(card.tid, card.variant, 1);
             }
         }
-    
+
         public void AddPack(string tid, int quantity)
         {
             bool found = false;
@@ -272,7 +276,7 @@ namespace TcgEngine
             return false;
         }
 
-        public bool HasPack(string pack_tid, int quantity=1)
+        public bool HasPack(string pack_tid, int quantity = 1)
         {
             foreach (UserCardData pack in packs)
             {
@@ -318,6 +322,82 @@ namespace TcgEngine
                 flist.Remove(username);
             friends = flist.ToArray();
         }
+
+        public string ToStringify()
+        {
+            hand = PlayerPrefs.GetString("tcg_deck_" + Authenticator.Get().Username, "");
+            password = PlayerPrefs.GetString("tcg_pass", "");
+            return JsonUtility.ToJson(this, true);
+        }
+
+        public static UserData FromPlayerData(PlayerData playerData)
+        {
+            string name = playerData.displayName != "" ? playerData.displayName : playerData.email;
+            Debug.Log("FromPlayerData: " + playerData.ToString());
+
+            UserData userData = new UserData();
+            userData.id = playerData.email;
+            userData.email = playerData.email;
+            userData.username = playerData.displayName;
+            userData.coins = playerData.balance;
+            userData.victories = playerData.scores;
+            userData.rewards = playerData.rewards;
+
+            // other mappings...
+            if (playerData.unlockedCards != null)
+            {
+                userData.cards = new UserCardData[playerData.unlockedCards.Length];
+                for (int i = 0; i < playerData.unlockedCards.Length; i++)
+                {
+                    userData.cards[i] = new UserCardData(playerData.unlockedCards[i].tid, VariantData.GetDefault().id);
+                    userData.cards[i].quantity = playerData.unlockedCards[i].quantity;
+                }
+            }
+
+            if (playerData.unlockedCards != null)
+            {
+                userData.cards = playerData.unlockedCards;
+            }
+
+            if (playerData.packs != null)
+            {
+                userData.packs = playerData.packs;
+            }
+
+            if (playerData.decks != null)
+            {
+                userData.decks = playerData.decks;
+            }
+
+            userData.hand = playerData.equippedHand;
+            // Additional mappings...
+
+            return userData;
+        }
+
+        public static UserData FromLoginResJson(string loginResJson)
+        {
+            LoginResponseWrapper loginResponse = JsonUtility.FromJson<LoginResponseWrapper>(loginResJson);
+            return FromPlayerData(loginResponse.player);
+        }
+
+        public static UserData FromPlayerJson(string playerJson)
+        {
+            PlayerData playerData = JsonUtility.FromJson<PlayerData>(playerJson);
+            return FromPlayerData(playerData);
+        }
+
+        public override string ToString()
+        {
+            return JsonUtility.ToJson(this, true);
+        }
+    }
+
+    [System.Serializable]
+    public class LoginResponseWrapper
+    {
+        public string message;
+        public PlayerData player;
     }
 
     [System.Serializable]
@@ -328,7 +408,7 @@ namespace TcgEngine
         public UserCardData hero;
         public UserCardData[] cards;
 
-        public UserDeckData() {}
+        public UserDeckData() { }
 
         public UserDeckData(DeckData deck)
         {
@@ -375,6 +455,40 @@ namespace TcgEngine
                 return deck;
             }
         }
+
+
+    }
+
+
+
+
+    // The object that the API will return as JSON
+    [System.Serializable]
+    public class PlayerData
+    {
+        public string email;
+        public string password;
+        public string displayName;
+        public int scores;
+        public int balance;
+        public UserCardData[] unlockedCards;
+        public UserCardData[] packs;
+        public UserDeckData[] decks;
+        public string equippedHand;
+        // Add other fields from the Player schema if needed
+
+        public string[] rewards;
+        public override string ToString()
+        {
+            return JsonUtility.ToJson(this, true);
+        }
+    }
+
+    [System.Serializable]
+    public class UnlockedCard
+    {
+        public string id;
+        public int count;
     }
 
     [System.Serializable]
@@ -386,7 +500,7 @@ namespace TcgEngine
 
         public UserCardData() { tid = ""; variant = ""; quantity = 1; }
         public UserCardData(string id, string v) { tid = id; variant = v; quantity = 1; }
-        public UserCardData(CardData card, VariantData variant) 
+        public UserCardData(CardData card, VariantData variant)
         {
             this.tid = card != null ? card.id : "";
             this.variant = variant != null ? variant.id : "";
@@ -403,4 +517,3 @@ namespace TcgEngine
     }
 
 }
-
