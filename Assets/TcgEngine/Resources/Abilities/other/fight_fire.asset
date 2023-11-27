@@ -16,9 +16,10 @@ MonoBehaviour:
   trigger: 22
   conditions_trigger:
   - {fileID: 11400000, guid: 707ab85bffdfd2643a7375e15b2fa634, type: 2}
-  target: 0
+  target: 5
   conditions_target: []
-  filters_target: []
+  filters_target:
+  - {fileID: 11400000, guid: 4b9c65e24f7fa5444932cafd0527d9b4, type: 2}
   effects:
   - {fileID: 11400000, guid: cca0b49cbfd46bd4386c93857d5e67c6, type: 2}
   status: []
