@@ -256,6 +256,16 @@ namespace TcgEngine.Gameplay
                 resolve_queue.Clear();
                 Player player = game_data.GetPlayer(winner);
                 onGameEnd?.Invoke(player);
+                cleanUpGame();
+            }
+        }
+
+        public void cleanUpGame()
+        {
+            foreach (Slot slot in Slot.GetAll())
+            {
+                slot.health = 5;
+                Slot.updateSlot(slot, slot.x);
             }
         }
 
