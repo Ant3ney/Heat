@@ -5613,15 +5613,30 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: -90
       objectReference: {fileID: 0}
-    - target: {fileID: 962576083860801215, guid: b2cda006105c05b428bace831c06c984,
+    - target: {fileID: 962576083860801185, guid: b2cda006105c05b428bace831c06c984,
         type: 3}
-      propertyPath: m_Alpha
+      propertyPath: m_CullTransparentMesh
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 962576083860801186, guid: b2cda006105c05b428bace831c06c984,
+        type: 3}
+      propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 962576083922520583, guid: b2cda006105c05b428bace831c06c984,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 90
+      objectReference: {fileID: 0}
+    - target: {fileID: 962576084075560422, guid: b2cda006105c05b428bace831c06c984,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 962576084075560422, guid: b2cda006105c05b428bace831c06c984,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -313
       objectReference: {fileID: 0}
     - target: {fileID: 962576084085233947, guid: b2cda006105c05b428bace831c06c984,
         type: 3}

@@ -10,22 +10,22 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 843a21f7f6f205741a0a7341aec8e84d, type: 3}
-  m_Name: Currency
+  m_Name: Cooler_Dale
   m_EditorClassIdentifier: 
-  id: currency
-  title: Currency
-  art_full: {fileID: 21300000, guid: a304b69330eabc1469fd67a1a80ab165, type: 3}
-  art_board: {fileID: 21300000, guid: 722bec0fcf4248747bd6d6b872d2209e, type: 3}
-  type: 20
+  id: firefighter_2
+  title: Cooler Dale
+  art_full: {fileID: 21300000, guid: a291ee86e43e4e743af1d5def6010462, type: 3}
+  art_board: {fileID: 21300000, guid: 244ed26aa5bdbc94d8318cf9a4d1e496, type: 3}
+  type: 10
   team: {fileID: 11400000, guid: 6bbb96863ece0314fb318c0fce569afc, type: 2}
-  rarity: {fileID: 11400000, guid: fab1a52f5a36cc942985dea95be18ac9, type: 2}
-  mana: 0
-  attack: 0
-  hp: 0
+  rarity: {fileID: 11400000, guid: 72248f07232412e4db2f6864dbb4e271, type: 2}
+  mana: 3
+  attack: 2
+  hp: 1
   traits: []
   stats: []
   abilities:
-  - {fileID: 11400000, guid: 1e02cc84fd15fca4aa3a7ff26fbc7afe, type: 2}
+  - {fileID: 11400000, guid: 9fe8aa3de16c55f42a51469594a12ca6, type: 2}
   text: 
   desc: 
   spawn_fx: {fileID: 9125387663047351618, guid: bac685160af4aff46ae561a51da6f5f4,
@@ -40,6 +40,4 @@ MonoBehaviour:
   damage_audio: {fileID: 0}
   deckbuilding: 1
   cost: 100
-  packs:
-  - {fileID: 11400000, guid: bafca3757bf537c43b1d2ba696456e2c, type: 2}
-  - {fileID: 11400000, guid: 2db0d9f08bdfa57419101c08b8598c1a, type: 2}
+  packs: []
