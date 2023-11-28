@@ -391,6 +391,10 @@ namespace TcgEngine
         {
             return JsonUtility.ToJson(this, true);
         }
+
+        /* public static UserData Get(){
+            return Authenticator.Get().UserData;
+        } */
     }
 
     [System.Serializable]

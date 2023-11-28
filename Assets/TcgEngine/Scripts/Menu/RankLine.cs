@@ -34,8 +34,8 @@ namespace TcgEngine.UI
             this.player.text = username;
             this.elo_txt.text = udata.elo.ToString();
 
-            int win_rate = Mathf.RoundToInt(udata.victories * 100f / Mathf.Max(udata.matches, 1));
-            this.winrate_txt.text = win_rate.ToString() + "%";
+            int win_rate = Mathf.RoundToInt(udata.victories);
+            this.winrate_txt.text = win_rate.ToString();
 
             this.highlight.enabled = highlight;
             gameObject.SetActive(true);

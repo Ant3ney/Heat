@@ -49,6 +49,7 @@ const playerController = {
   },
   findAllPlayers({ body }, res) {
     console.log("Attempting to find all players");
+    console.log("Attempting to find all players");
     Player.find()
       .then((foundPlayers) => {
         console.log("Num Players found:", foundPlayers.length);

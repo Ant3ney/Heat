@@ -45,6 +45,8 @@ namespace TcgEngine
 
         private static ApiClient instance;
 
+
+
         void Awake()
         {
             //API client should be on OnDestroyOnLoad
@@ -106,6 +108,11 @@ namespace TcgEngine
                 online_timer = 0f;
                 await KeepOnline();
             }
+        }
+
+        public UserData GetUserData()
+        {
+            return udata;
         }
 
         public static async Task<List<UserData>> getAllUsers()
@@ -347,18 +354,20 @@ namespace TcgEngine
 
         public async void EndMatch(Game game_data, int winner_id)
         {
-            if (game_data.settings.game_type != GameType.Multiplayer)
-                return;
-
             Player player = game_data.GetPlayer(winner_id);
+            bool is_human = !player.is_ai;
             CompleteMatchRequest req = new CompleteMatchRequest();
             req.tid = game_data.game_uid;
             req.winner = player != null ? player.username : "";
 
-            string url = ServerURL + "/matches/complete";
-            string json = ApiTool.ToJson(req);
-            WebResponse res = await SendPostRequest(url, json);
-            Debug.Log("Match Completed! " + res.success);
+            UserData udata = Authenticator.Get().GetUserData();
+            if (is_human) udata.victories++;
+            else udata.defeats++;
+
+            bool success = await SaveUserData(udata);
+            /* WebResponse res = await SendPostRequest(url, json);
+            Debug.Log("Match Completed! " + res.success); */
+            Debug.Log("Match completed and saved results status: " + success);
         }
 
         public async Task<string> SendGetVersion()
