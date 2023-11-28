@@ -361,6 +361,7 @@ namespace TcgEngine
             req.winner = player != null ? player.username : "";
 
             UserData udata = Authenticator.Get().GetUserData();
+            if (udata == null) udata = await LoadUserData();
             if (is_human) udata.victories++;
             else udata.defeats++;
 
