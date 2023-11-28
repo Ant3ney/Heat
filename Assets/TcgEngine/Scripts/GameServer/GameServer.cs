@@ -753,11 +753,10 @@ namespace TcgEngine.Server
             SendToAll(GameAction.GameEnd, msg, NetworkDelivery.Reliable);
             RefreshAll();
 
-            if (is_dedicated_server && Authenticator.Get().IsApi())
-            {
-                //End Match and give rewards
-                ApiClient.Get().EndMatch(game_data, winner.player_id);
-            }
+
+            //End Match and give rewards
+            ApiClient.Get().EndMatch(game_data, winner.player_id);
+
         }
 
         protected virtual void OnTurnStart()

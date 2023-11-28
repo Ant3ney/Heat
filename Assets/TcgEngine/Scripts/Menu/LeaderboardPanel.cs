@@ -75,7 +75,7 @@ namespace TcgEngine.UI
             /* if (!Authenticator.Get().IsApi())
                 return; */
 
-            UserData udata = ApiClient.Get().UserData;
+            UserData udata = Authenticator.Get().GetUserData();
 
             int index = 0;
             List<UserData> sorted_users = await ApiClient.getAllUsers();
@@ -93,6 +93,8 @@ namespace TcgEngine.UI
             {
                 /* if (user.permission_level != 1 || user.matches == 0)
                     continue; //Dont show admins and user with no matches */
+
+                Debug.Log("User: " + user.username + " vs " + udata.username);
 
                 if (user.username == udata.username)
                 {
