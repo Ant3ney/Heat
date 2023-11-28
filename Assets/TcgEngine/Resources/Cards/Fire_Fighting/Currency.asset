@@ -24,7 +24,8 @@ MonoBehaviour:
   hp: 0
   traits: []
   stats: []
-  abilities: []
+  abilities:
+  - {fileID: 11400000, guid: 2841093c6dacc2c419c03663c168fb72, type: 2}
   text: 
   desc: 
   spawn_fx: {fileID: 9125387663047351618, guid: bac685160af4aff46ae561a51da6f5f4,

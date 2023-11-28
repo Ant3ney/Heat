@@ -24,9 +24,10 @@ MonoBehaviour:
   hp: 0
   traits: []
   stats: []
-  abilities: []
-  text: 
-  desc: 
+  abilities:
+  - {fileID: 11400000, guid: d753d81200fc2704b87c7c428459dfc6, type: 2}
+  text: Deal 1 damage to target fire.
+  desc: Deal 1 damage to target fire.
   spawn_fx: {fileID: 2106287953758554471, guid: a1e1ec86d02e969408bf2a6c17010f46,
     type: 3}
   death_fx: {fileID: 0}
