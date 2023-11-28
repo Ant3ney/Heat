@@ -12,6 +12,15 @@ namespace TcgEngine
     [CreateAssetMenu(fileName = "effect", menuName = "TcgEngine/Effect/FightFire", order = 10)]
     public class EffectFightFire : EffectData
     {
+        public TraitData bonus_damage;
+
+        private int GetDamage(Game data, Card caster, int value)
+        {
+            Player player = data.GetPlayer(caster.player_id);
+            int damage = value + caster.GetAttack() + player.GetTraitValue(bonus_damage);
+            return damage;
+        }
+
         public override void DoEffect(GameLogic logic, AbilityData ability, Card caster, Player target)
         {
 
@@ -25,7 +34,7 @@ namespace TcgEngine
 
 
 
-
+            
             int[] adjacentCoordinates = Utilities.getAdjacentCoordinates(fireFighterCoordinate);
             /* string adjacentCoordinatesLog = "Adjacent Coordinates: " + adjacentCoordinates.Length;
             foreach (int coordinate in adjacentCoordinates)
@@ -47,9 +56,10 @@ namespace TcgEngine
                     }
                 }
             }
+            int damage = GetDamage(logic.GameData, caster, ability.value);
             foreach (Card card in adjacentFireCards)
             {
-                logic.DamageCard(card, 1);
+                logic.DamageCard(card, damage);
             }
         }
     }

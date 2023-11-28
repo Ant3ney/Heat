@@ -25,7 +25,7 @@ MonoBehaviour:
   traits: []
   stats: []
   abilities:
-  - {fileID: 11400000, guid: 2841093c6dacc2c419c03663c168fb72, type: 2}
+  - {fileID: 11400000, guid: 1e02cc84fd15fca4aa3a7ff26fbc7afe, type: 2}
   text: 
   desc: 
   spawn_fx: {fileID: 9125387663047351618, guid: bac685160af4aff46ae561a51da6f5f4,
