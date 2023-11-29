@@ -256,18 +256,20 @@ namespace TcgEngine.Gameplay
                 resolve_queue.Clear();
                 Player player = game_data.GetPlayer(winner);
                 onGameEnd?.Invoke(player);
-                cleanUpGame();
+                //cleanUpGame();
             }
         }
 
+        /*
         public void cleanUpGame()
         {
-            foreach (Slot slot in Slot.GetAll())
+            for (Slot slot in Slot.GetAll())
             {
                 slot.health = 5;
                 Slot.updateSlot(slot, slot.x);
             }
         }
+        */
 
         //Progress to the next step/phase 
         public virtual void NextStep()

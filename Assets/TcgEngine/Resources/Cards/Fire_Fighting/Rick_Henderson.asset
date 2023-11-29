@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 843a21f7f6f205741a0a7341aec8e84d, type: 3}
-  m_Name: Cooler_Dale
+  m_Name: Rick_Henderson
   m_EditorClassIdentifier: 
   id: firefighter_2
-  title: Cooler Dale
+  title: Rick Henderson
   art_full: {fileID: 21300000, guid: a291ee86e43e4e743af1d5def6010462, type: 3}
   art_board: {fileID: 21300000, guid: 244ed26aa5bdbc94d8318cf9a4d1e496, type: 3}
   type: 10
