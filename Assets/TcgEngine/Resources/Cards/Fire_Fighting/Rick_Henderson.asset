@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: firefighter_2
   title: Rick Henderson
-  art_full: {fileID: 21300000, guid: a291ee86e43e4e743af1d5def6010462, type: 3}
-  art_board: {fileID: 21300000, guid: 244ed26aa5bdbc94d8318cf9a4d1e496, type: 3}
+  art_full: {fileID: 21300000, guid: fefdd22a8153a154294b1504c2ec01ea, type: 3}
+  art_board: {fileID: 21300000, guid: 3cc21d6449692ca4481e5745098392a2, type: 3}
   type: 10
   team: {fileID: 11400000, guid: 6bbb96863ece0314fb318c0fce569afc, type: 2}
   rarity: {fileID: 11400000, guid: 72248f07232412e4db2f6864dbb4e271, type: 2}

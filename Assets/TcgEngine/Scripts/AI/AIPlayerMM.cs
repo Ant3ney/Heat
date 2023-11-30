@@ -136,6 +136,42 @@ namespace TcgEngine.AI
                         }
                     }
                 }
+                else if (card.card_id == "fire_truck")
+                {
+                    int fireFighterLocation = slot.x;
+                    int[] adjacentCoordinates = Utilities.getAdjacentCoordinates(fireFighterLocation);
+                    foreach (int coordinate in adjacentCoordinates)
+                    {
+                        if (coordinate != 0)
+                        {
+                            adjacentFireFighterSlots.Add(coordinate);
+                        }
+                    }
+                }
+                else if (card.card_id == "firefighter_2")
+                {
+                    int fireFighterLocation = slot.x;
+                    int[] adjacentCoordinates = Utilities.getAdjacentCoordinates(fireFighterLocation);
+                    foreach (int coordinate in adjacentCoordinates)
+                    {
+                        if (coordinate != 0)
+                        {
+                            adjacentFireFighterSlots.Add(coordinate);
+                        }
+                    }
+                }
+                else if (card.card_id == "firefighter_2")
+                {
+                    int fireFighterLocation = slot.x;
+                    int[] adjacentCoordinates = Utilities.getAdjacentCoordinates(fireFighterLocation);
+                    foreach (int coordinate in adjacentCoordinates)
+                    {
+                        if (coordinate != 0)
+                        {
+                            adjacentFireFighterSlots.Add(coordinate);
+                        }
+                    }
+                }
 
             }
 

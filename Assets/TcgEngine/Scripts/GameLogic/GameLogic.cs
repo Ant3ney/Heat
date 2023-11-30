@@ -263,6 +263,7 @@ namespace TcgEngine.Gameplay
 
         public void cleanUpGame()
         {
+            var tempSlots = new List<Slot>();
             foreach (Slot slot in Slot.GetAll())
             {
                 Slot newSlot = new Slot(slot.x, slot.y, slot.p);

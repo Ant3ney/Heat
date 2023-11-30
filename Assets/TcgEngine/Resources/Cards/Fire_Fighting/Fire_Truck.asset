@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: fire_truck
   title: Fire Truck
-  art_full: {fileID: 21300000, guid: 31c9c961569f6c04ca67edb890d1cfcf, type: 3}
-  art_board: {fileID: 21300000, guid: cb36b13a00e8cf14c9d2fd86eb8b3027, type: 3}
+  art_full: {fileID: 21300000, guid: 5dcbd481ce303544097fd80e64c70194, type: 3}
+  art_board: {fileID: 21300000, guid: 13bef62579a0ca04d9296b89f7ede67a, type: 3}
   type: 20
   team: {fileID: 11400000, guid: 6bbb96863ece0314fb318c0fce569afc, type: 2}
   rarity: {fileID: 11400000, guid: 72248f07232412e4db2f6864dbb4e271, type: 2}
