@@ -216,7 +216,7 @@ namespace TcgEngine
         public static void updateSlot(Slot newSlot, int x)
         {
             for (int i = 0; i < Slot.GetAll().Count; i++)
-            { // Use for loop to iterate
+            {
                 if (Slot.GetAll()[i].x == x)
                 {
                     Slot.GetAll()[i] = newSlot; // Modify the list as needed

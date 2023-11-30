@@ -249,6 +249,7 @@ namespace TcgEngine.Gameplay
         {
             if (game_data.state != GameState.GameEnded)
             {
+                cleanUpGame();
                 game_data.state = GameState.GameEnded;
                 game_data.phase = GamePhase.None;
                 game_data.selector = SelectorType.None;
@@ -256,16 +257,23 @@ namespace TcgEngine.Gameplay
                 resolve_queue.Clear();
                 Player player = game_data.GetPlayer(winner);
                 onGameEnd?.Invoke(player);
-                cleanUpGame();
             }
         }
 
         public void cleanUpGame()
         {
+            Debug.Log("Cleaning up game!");
+            var tempSlots = new List<Slot>();
             foreach (Slot slot in Slot.GetAll())
             {
-                slot.health = 5;
-                Slot.updateSlot(slot, slot.x);
+                Slot newSlot = new Slot(slot.x, slot.y, slot.p);
+                newSlot.health = 5;
+                tempSlots.Add(newSlot);
+            }
+
+            foreach (Slot newSlot in tempSlots)
+            {
+                Slot.updateSlot(newSlot, newSlot.x);
             }
         }
 
