@@ -260,10 +260,9 @@ namespace TcgEngine.Gameplay
             }
         }
 
+
         public void cleanUpGame()
         {
-            Debug.Log("Cleaning up game!");
-            var tempSlots = new List<Slot>();
             foreach (Slot slot in Slot.GetAll())
             {
                 Slot newSlot = new Slot(slot.x, slot.y, slot.p);
@@ -276,6 +275,7 @@ namespace TcgEngine.Gameplay
                 Slot.updateSlot(newSlot, newSlot.x);
             }
         }
+
 
         //Progress to the next step/phase 
         public virtual void NextStep()
