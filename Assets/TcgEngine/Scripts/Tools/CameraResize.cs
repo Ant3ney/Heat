@@ -80,7 +80,7 @@ namespace TcgEngine
             //bool allow_wide = TheGame.IsMobile() && TheGame.Get() != null;
             //float max = allow_wide ? 16f / 8f : 16f / 9f;
 
-            
+
             float max = 900f;
             return max;
         }
@@ -100,11 +100,12 @@ namespace TcgEngine
 
         public static float GetAspectRatio()
         {
-            float max = GetAspectMax();
+            /* float max = GetAspectMax();
             float min = GetAspectMin();
             float screenRatio = Screen.width / (float)Screen.height;
             float targetRatio = Mathf.Clamp(screenRatio, min, max);
-            return targetRatio;
+            return targetRatio; */
+            return 9f / 16f;
         }
 
         public static float GetAspectValue()
