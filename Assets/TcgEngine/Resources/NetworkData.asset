@@ -16,5 +16,5 @@ MonoBehaviour:
   port: 8777
   api_url: https://heat.singularitydevelopment.com
   api_https: 1
-  solo_type: 0
+  solo_type: 10
   auth_type: 0

@@ -1,8 +1,17 @@
 const mongoose = require("mongoose");
 const express = require("express");
+let cors = require("cors");
 const app = express();
 app.use(express.json());
 const port = process.env.PORT || 3011;
+
+let corsOptions = {
+  origin: function (origin, callback) {
+    callback(null, true);
+  },
+};
+
+app.use(cors(corsOptions));
 
 const uri =
   "mongodb+srv://anthonycavuoti:zDzbQusUBCy5BQ3h@auth.bkpebfi.mongodb.net/?retryWrites=true&w=majority";

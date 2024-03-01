@@ -199,6 +199,7 @@ namespace TcgEngine.Client
             if (game_settings.IsHost() && NetworkData.Get().solo_type == SoloType.Offline)
             {
                 TcgNetwork.Get().StartHostOffline();    //WebGL dont support hosting a game, must join a dedicated server, in solo it starts a offline mode that doesn't use netcode at all
+                Debug.Log("Should see me");
             }
             else if (game_settings.IsHost())
             {

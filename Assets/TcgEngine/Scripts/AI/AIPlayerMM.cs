@@ -72,25 +72,29 @@ namespace TcgEngine.AI
                     aiActions[0].slot = new Slot(getRandomValidSlotForFire(game_data), 1, 0);
                     spawnedSeasonFire = true;
                 }
-
                 // Get all tiles to burn
                 // Calls Async code in synchronous way
                 IEnumerator slotsToBurnCoroutine = ai_logic.getTilesToBurn(game_data);
                 yield return slotsToBurnCoroutine;
-                List<int> slotsToBurn = (List<int>)slotsToBurnCoroutine.Current;
+                /*
+                                                List<int> slotsToBurn = (List<int>)slotsToBurnCoroutine.Current;
 
-                int actionIndex = spawnedSeasonFire ? 1 : 0;
-                foreach (var slotCordinate in slotsToBurn)
-                {
-                    aiActions.Add(new AIAction());
-                    aiActions[actionIndex].type = GameAction.PlayCard;
-                    aiActions[actionIndex].slot = new Slot(slotCordinate, 1, 0);
+                                                int actionIndex = spawnedSeasonFire ? 1 : 0;
+                                                foreach (var slotCordinate in slotsToBurn)
+                                                {
+                                                    aiActions.Add(new AIAction());
+                                                    aiActions[actionIndex].type = GameAction.PlayCard;
+                                                    aiActions[actionIndex].slot = new Slot(slotCordinate, 1, 0);
 
-                    actionIndex++;
-                }
+                                                    actionIndex++;
+                                                }
+
+                                                aiActions.Add(new AIAction()); 
+                                aiActions[actionIndex].type = GameAction.EndTurn;
+                */
 
                 aiActions.Add(new AIAction());
-                aiActions[actionIndex].type = GameAction.EndTurn;
+                aiActions[0].type = GameAction.EndTurn;
             }
 
             foreach (var aiAction in aiActions)

@@ -13,29 +13,29 @@ public static class Utilities
         }
         int[][] spreadOptions = new int[][]
         {
-                /* new int[] {north, south, east, west} */
-                new int[] {0, 5, 2, 0}, // coordinate 1
-                new int[] {0, 6, 3, 1}, // coordinate 2
-                new int[] {0, 7, 4, 2}, // coordinate 3
-                new int[] {0, 8, 0, 3}, // coordinate 4
-                new int[] {1, 9, 6, 0}, // coordinate 5
-                new int[] {2, 10, 7, 5}, // coordinate 6
-                new int[] {3, 11, 8, 6}, // coordinate 7
-                new int[] {4, 12, 0, 7}, // coordinate 8
-                new int[] {5, 13, 10, 0}, // coordinate 9
-                new int[] {6, 14, 11, 9}, // coordinate 10
-                new int[] {7, 15, 12, 10}, // coordinate 11
-                new int[] {8, 16, 0, 11}, // coordinate 12
-                new int[] {9, 0, 14, 0}, // coordinate 13
-                new int[] {10, 18, 15, 13}, // coordinate 14
-                new int[] {11, 19, 16, 14}, // coordinate 15
-                new int[] {12, 20, 17, 15}, // coordinate 16
-                new int[] {0, 26, 0, 16}, // coordinate 17
-                new int[] {14, 23, 19, 0}, // coordinate 18
-                new int[] {15, 24, 20, 18}, // coordinate 19
-                new int[] {16, 25, 21, 19}, // coordinate 20
-                new int[] {17, 26, 22, 20}, // coordinate 21
-                new int[] {0, 27, 0, 21}, // coordinate 22
+                /* new int[] {north, south, east, west, northwest, northeast, southwest, southeast} */
+                new int[] {0, 5, 2, 0, 0, 0, 0, 6}, // coordinate 1
+                new int[] {0, 6, 3, 1, 0, 0, 5, 7}, // coordinate 2
+                new int[] {0, 7, 4, 2, 0, 0, 6, 8}, // coordinate 3
+                new int[] {0, 8, 0, 3, 0, 0, 7, 0}, // coordinate 4
+                new int[] {1, 9, 6, 0, 0, 2, 0, 10}, // coordinate 5
+                new int[] {2, 10, 7, 5, 1, 3, 9, 11}, // coordinate 6
+                new int[] {3, 11, 8, 6, 2, 4, 10, 12}, // coordinate 7
+                new int[] {4, 12, 0, 7, 2, 0, 11, 0}, // coordinate 8
+                new int[] {5, 13, 10, 0, 0, 6, 0, 14}, // coordinate 9
+                new int[] {6, 14, 11, 9, 5, 7, 13, 15}, // coordinate 10
+                new int[] {7, 15, 12, 10, 6, 8, 14, 16}, // coordinate 11
+                new int[] {8, 16, 0, 11, 7, 0, 15, 0}, // coordinate 12
+                new int[] {9, 0, 14, 0, 0, 10, 0, 18}, // coordinate 13
+                new int[] {10, 18, 15, 13, 9, 11, 0, 19}, // coordinate 14
+                new int[] {11, 19, 16, 14, 10, 12, 18, 20}, // coordinate 15
+                new int[] {12, 20, 17, 15, 11, 0, 19, 21}, // coordinate 16
+                new int[] {0, 26, 0, 16, 12, 0, 20, 22}, // coordinate 17
+                new int[] {14, 23, 19, 0, 13, 15, 0, 24}, // coordinate 18
+                new int[] {15, 24, 20, 18, 14, 16, 23, 25}, // coordinate 19
+                new int[] {16, 25, 21, 19, 15, 17, 24, 26}, // coordinate 20
+                new int[] {17, 26, 22, 20, 16, 0, 25, 27}, // coordinate 21
+                new int[] {0, 27, 0, 21, 17, 0, 26, 28}, // coordinate 22
                 new int[] {18, 0, 24, 0}, // coordinate 23
                 new int[] {19, 29, 25, 23}, // coordinate 24
                 new int[] {20, 30, 26, 24}, // coordinate 25
