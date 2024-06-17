@@ -126,7 +126,7 @@ namespace TcgEngine.AI
             running = false;
         }
 
-        public IEnumerator getTilesToBurn(Game data)
+        public List<int> getTilesToBurn(Game data)
         {
             List<Slot> allSlots = Slot.GetAll();
             List<Slot> slotsWithFire = new List<Slot>();
@@ -169,9 +169,19 @@ namespace TcgEngine.AI
             }
 
             int windDirectionIndex = Random.Range(0, 4);
-            IEnumerator fireSpreadCoroutine = AIFetcher.fetchFireSpreadCoordinates(spreadPayloads);/*
-            yield return fireSpreadCoroutine;
-            potentialSlotsToBurn = (string[])fireSpreadCoroutine.Current;
+            IEnumerator fireSpreadCoroutine = AIFetcher.fetchFireSpreadCoordinates(spreadPayloads);
+
+            potentialSlotsToBurn = Utilities.getFireSpreadCoordinates(spreadPayloads);
+
+            // Print out potentialSlotsToBurn
+            /* foreach (string slot in potentialSlotsToBurn)
+            {
+                Debug.Log(slot);
+            } */
+
+
+            /*             yield return fireSpreadCoroutine;
+                        potentialSlotsToBurn = (string[])fireSpreadCoroutine.Current; */
 
 
             foreach (string slotString in potentialSlotsToBurn)
@@ -185,8 +195,13 @@ namespace TcgEngine.AI
                     slotsToBurn.Add(slotToBurn);
                 }
             }
-*/
-            yield return slotsToBurn;
+            /*
+            */
+            /* foreach (int slot in slotsToBurn)
+            {
+                Debug.Log("Burn: " + slot);
+            } */
+            return slotsToBurn;
         }
 
         private int[] temporaryFireSpreadAI(int center)

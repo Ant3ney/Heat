@@ -56,6 +56,7 @@ namespace TcgEngine.AI
                 aiActions[0].card_uid = card_hand_id;
 
                 int randomStartingPoint = getRandomValidSlotForFire(game_data, true);
+                //List<int> burnSlots = new List<int>();
                 aiActions[0].slot = new Slot(randomStartingPoint, 1, 0);
                 aiActions[1].type = GameAction.EndTurn;
             }
@@ -74,27 +75,25 @@ namespace TcgEngine.AI
                 }
                 // Get all tiles to burn
                 // Calls Async code in synchronous way
-                IEnumerator slotsToBurnCoroutine = ai_logic.getTilesToBurn(game_data);
-                yield return slotsToBurnCoroutine;
-                /*
-                                                List<int> slotsToBurn = (List<int>)slotsToBurnCoroutine.Current;
+                List<int> slotsToBurn = (List<int>)ai_logic.getTilesToBurn(game_data);
 
-                                                int actionIndex = spawnedSeasonFire ? 1 : 0;
-                                                foreach (var slotCordinate in slotsToBurn)
-                                                {
-                                                    aiActions.Add(new AIAction());
-                                                    aiActions[actionIndex].type = GameAction.PlayCard;
-                                                    aiActions[actionIndex].slot = new Slot(slotCordinate, 1, 0);
+                foreach (int slot in slotsToBurn)
+                {
+                    Debug.Log("Burn: " + slot);
+                }
 
-                                                    actionIndex++;
-                                                }
+                int actionIndex = spawnedSeasonFire ? 1 : 0;
+                foreach (var slotCordinate in slotsToBurn)
+                {
+                    aiActions.Add(new AIAction());
+                    aiActions[actionIndex].type = GameAction.PlayCard;
+                    aiActions[actionIndex].slot = new Slot(slotCordinate, 1, 0);
 
-                                                aiActions.Add(new AIAction()); 
-                                aiActions[actionIndex].type = GameAction.EndTurn;
-                */
+                    actionIndex++;
+                }
 
                 aiActions.Add(new AIAction());
-                aiActions[0].type = GameAction.EndTurn;
+                aiActions[actionIndex].type = GameAction.EndTurn;
             }
 
             foreach (var aiAction in aiActions)
@@ -107,6 +106,11 @@ namespace TcgEngine.AI
 
             yield return new WaitForSeconds(0.5f);
             is_playing = false;
+        }
+
+        List<int> getNRandomValidSlotsForFire(Game game_data, bool start, int n)
+        {
+
         }
 
         int getRandomValidSlotForFire(Game game_data, bool start = false)
